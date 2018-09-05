@@ -9,8 +9,9 @@ canvas.height = height;
 var player = new Player();
 
 function update() {
-  playerMovement();
-  player.draw();
+  ctx.clearRect(0, 0, width, height); // CLears the canvas
+  drawMap(); // Draws the tilemap
+  playerMovement(); // Draws the character
   requestAnimationFrame(update);
 }
 
