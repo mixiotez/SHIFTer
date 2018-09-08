@@ -1,16 +1,16 @@
 class Player {
   constructor() {
-    this.x = 416;
-    this.y = 416;
+    this.x = 420;
+    this.y = 420;
     this.width = 15;
     this.height = 30;
 
     // Movement properties
     this.velX = 0;
     this.velY = 0;
-    this.speed = 3.5; // How fast the player can go
+    this.speed = 2.5; // How fast the player can go
     this.jumping = false; // This lets us know if the user can jump or not. Prevents infinite jumps.
-    this.friction = 0.75; // This makes the players slide a bit instead of suddently stopping
+    this.friction = 0.8; // This makes the players slide a bit instead of suddently stopping
     this.gravity = 0.3; // If player is not standing in a platform, gravity will pull them down
   }
 
@@ -18,14 +18,37 @@ class Player {
     ctx.fillStyle = "white";
     ctx.fillRect(this.x, this.y, this.width, this.height);
   }
+
+  itemCollision(item){ // Collision for grabbing items
+    return (this.x < item.x + item.width) &&
+        (this.x + this.width > item.x) &&
+        (this.y < item.y + item.height) &&
+        (this.y + this.height > item.y);
+  }
+
+  respawn(){
+    currentMap = checkLevel().mapMain;
+    this.x = -100; // This makes the player disappear from the canvas by hidding it
+    this.y = -100;
+
+    setTimeout(() => { // Respawn point
+      this.x = 420;
+      this.y = 420;
+    }, 500);
+  }
+
+  nextLevel(){
+    levelCount++;
+    this.respawn();
+  }
 }
 
-var keys = [];
+const keys = [];
 
 function playerMovement() {
-  if (keys[32]) if (!player.jumping) { // jump
+  if (keys[32] || keys[38]) if (!player.jumping) { // jump
       player.jumping = true;
-      player.velY = -player.speed * 2;
+      player.velY = -player.speed * 2.75;
     }
 
   if (keys[39]) if (player.velX < player.speed) player.velX++; // right
@@ -40,6 +63,13 @@ function playerMovement() {
   player.velX *= player.friction;
   player.velY += player.gravity;
 
+  // Changes between map layers
+  if (keys[65]) currentMap = checkLevel().mapMain; // A
+  if (keys[68]) currentMap = checkLevel().mapAlt; // D
+
+   // Restart
+  if (keys[82]) player.respawn(); //R
+
   player.draw();
 }
 
@@ -52,7 +82,7 @@ document.body.onkeyup = (e) => {
 };
 
 function tileCollision(tile) {
-  let vX = player.x + player.width / 2 - (tile.x + tile.width / 2),
+  const vX = player.x + player.width / 2 - (tile.x + tile.width / 2),
       vY = player.y + player.height / 2 - (tile.y + tile.height / 2),
 
   // Add the half widths and half heights of the objects
@@ -63,9 +93,9 @@ function tileCollision(tile) {
   if (Math.abs(vX) < hWidths && Math.abs(vY) < hHeights) {
 
   // offsetX and offsetY - Figures out on which side we are colliding with (top, bottom, left, or right)
-    var oX = hWidths - Math.abs(vX),
-        oY = hHeights - Math.abs(vY),
-        direction = undefined;
+    const oX = hWidths - Math.abs(vX),
+        oY = hHeights - Math.abs(vY);
+    var direction = undefined;
 
     if (oX >= oY){
       if (vY > 0) {

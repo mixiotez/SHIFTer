@@ -1,16 +1,16 @@
-var canvas = document.getElementById("canvas");
-var ctx = canvas.getContext("2d");
-var width = 480;
-var height = 480;
+const canvas = document.getElementById("canvas");
+const ctx = canvas.getContext("2d");
+const width = 480;
+const height = 480;
 
 canvas.width = width;
 canvas.height = height;
 
-var player = new Player();
+const player = new Player();
 
 function update() {
   ctx.clearRect(0, 0, width, height); // CLears the canvas
-  drawMap(); // Draws the tilemap
+  drawMap(currentMap); // Draws the tilemap
   playerMovement(); // Draws the character
   requestAnimationFrame(update);
 }
