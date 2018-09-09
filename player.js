@@ -1,7 +1,5 @@
 class Player {
   constructor() {
-    this.x = 420;
-    this.y = 420;
     this.width = 15;
     this.height = 30;
 
@@ -26,14 +24,20 @@ class Player {
         (this.y + this.height > item.y);
   }
 
+  spawn(){ // Checks what's the level's x and y spawn coordinates and assigns it to the player
+    this.velX = 0;
+    this.velY = 0;
+    this.x = checkLevel().spawnPoint[0];
+    this.y = checkLevel().spawnPoint[1];
+  }
+
   respawn(){
     currentMap = checkLevel().mapMain;
-    this.x = -100; // This makes the player disappear from the canvas by hidding it
-    this.y = -100;
+    this.x = undefined; // This makes the player disappear from the canvas by hidding it
+    this.y = undefined;
 
-    setTimeout(() => { // Respawn point
-      this.x = 420;
-      this.y = 420;
+    setTimeout(() => {
+      this.spawn();
     }, 500);
   }
 
@@ -64,11 +68,15 @@ function playerMovement() {
   player.velY += player.gravity;
 
   // Changes between map layers
-  if (keys[65]) currentMap = checkLevel().mapMain; // A
-  if (keys[68]) currentMap = checkLevel().mapAlt; // D
+  if (keys[65]) {
+    currentMap = checkLevel().mapMain;
+    document.getElementsByTagName("body")[0].style.filter = "invert(0%)";
+  } if (keys[68]) {
+    currentMap = checkLevel().mapAlt;
+    document.getElementsByTagName("body")[0].style.filter = "invert(100%)";}
 
    // Restart
-  if (keys[82]) player.respawn(); //R
+  if (keys[82]) player.respawn(); // R
 
   player.draw();
 }
@@ -83,7 +91,7 @@ document.body.onkeyup = (e) => {
 
 function tileCollision(tile) {
   const vX = player.x + player.width / 2 - (tile.x + tile.width / 2),
-      vY = player.y + player.height / 2 - (tile.y + tile.height / 2),
+        vY = player.y + player.height / 2 - (tile.y + tile.height / 2),
 
   // Add the half widths and half heights of the objects
     hWidths = player.width / 2 + tile.width / 2,
@@ -94,7 +102,7 @@ function tileCollision(tile) {
 
   // offsetX and offsetY - Figures out on which side we are colliding with (top, bottom, left, or right)
     const oX = hWidths - Math.abs(vX),
-        oY = hHeights - Math.abs(vY);
+          oY = hHeights - Math.abs(vY);
     var direction = undefined;
 
     if (oX >= oY){

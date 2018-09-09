@@ -3,9 +3,15 @@
   margin: 0;
 }
 
+body{
+  background-image: url("https://s3.pixers.pics/pixers/700/FO/14/12/89/25/0/700_FO141289250_bb3c2340edb5ba359cde69f4b7bb252a.jpg");
+  filter: invert(0%);
+  display: flex;
+  justify-content: center;
+}
+
 canvas {
   background-color: black;
-  display: block;
-  width: 100vw;
+  width: 100vh;
   height: 100vh;
 }

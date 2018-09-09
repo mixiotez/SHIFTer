@@ -15,4 +15,4 @@ function update() {
   requestAnimationFrame(update);
 }
 
-window.onload = update();
+window.onload = player.spawn(); update();
