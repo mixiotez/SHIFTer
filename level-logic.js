@@ -1,3 +1,22 @@
+// Items
+const key = new Image();
+key.src = "./images/key.png"
+
+const hiddenKey = new Image();
+hiddenKey.src = "./images/key-hidden.png"
+
+const door = new Image();
+door.src = "./images/door.png"
+
+const closedDoor = new Image();
+closedDoor.src = "./images/closedDoor.png"
+
+const saw = new Image();
+saw.src = "./images/saw.png"
+
+const hiddenSaw = new Image();
+hiddenSaw.src = "./images/saw-hidden.png"
+
 // This fuction checks every value of the 2D array and returns an image
 function drawMap(m){
 
@@ -28,13 +47,12 @@ function drawMap(m){
 
       if (m[i][j] === 3) {
         let tile = {
-          x: tilesize * [j],
-          y: tilesize * [i] + 15,
-          width: tilesize,
-          height: tilesize - 15
+          x: tilesize * [j] + 2,
+          y: tilesize * [i] + 4,
+          width: tilesize - 4,
+          height: tilesize - 4
         }
-        ctx.fillStyle = "rgb(255,0,0)"
-        ctx.fillRect(tile.x, tile.y, tile.width, tile.height);
+        ctx.drawImage(saw, tile.x, tile.y, tile.height, tile.width)
         if (player.itemCollision(tile)) {
           player.respawn();
           checkLevel().keys++;
@@ -43,39 +61,51 @@ function drawMap(m){
 
       if (m[i][j] === 4) {
         let tile = {
-          x: tilesize * [j],
-          y: tilesize * [i] + 15,
-          width: tilesize,
-          height: tilesize - 15
+          x: tilesize * [j] + 2,
+          y: tilesize * [i] + 4,
+          width: tilesize - 4,
+          height: tilesize - 4
         }
-        ctx.fillStyle = "rgba(255,0,0,0.2)"
-        ctx.fillRect(tile.x, tile.y, tile.width, tile.height);
+        ctx.drawImage(hiddenSaw, tile.x, tile.y, tile.height, tile.width)
       }
 
       if (m[i][j] === 5) {
         if (checkLevel().keys > 0){
           let tile = {
-            x: tilesize * [j] + 10,
-            y: tilesize * [i] + 15,
-            width: tilesize - 20,
-            height: tilesize - 15
+            x: tilesize * [j] + 4,
+            y: tilesize * [i] + 8,
+            width: tilesize - 8,
+            height: tilesize - 8
           }
-          ctx.fillStyle = "blue";
-          ctx.fillRect(tile.x, tile.y, tile.width, tile.height);
+          ctx.drawImage(key, tile.x, tile.y, tile.width, tile.height);
           if (player.itemCollision(tile)) checkLevel().keys--;
         }
       }
 
-      if (m[i][j] === 8) {
-        if (checkLevel().keys === 0){ // If no keys are present, the exit portal will open
+      if (m[i][j] === 6) {
+        if (checkLevel().keys > 0){
           let tile = {
-            x: tilesize * [j] + 10,
-            y: tilesize * [i] + 6,
-            width: tilesize - 20,
-            height: tilesize - 6
+            x: tilesize * [j] + 4,
+            y: tilesize * [i] + 8,
+            width: tilesize - 8,
+            height: tilesize - 8
           }
-          ctx.fillStyle = "green";
-          ctx.fillRect(tile.x, tile.y, tile.width, tile.height);
+          ctx.drawImage(hiddenKey, tile.x, tile.y, tile.width, tile.height);
+        }
+      }
+
+      if (m[i][j] === 8) {
+        let tile = {
+          x: tilesize * [j] + 2,
+          y: tilesize * [i] + 2,
+          width: tilesize - 4,
+          height: tilesize - 4
+        }
+        // If there are keys in the room, the door will remain closed
+        if (checkLevel().keys !== 0) ctx.drawImage(closedDoor, tile.x, tile.y, tile.width, tile.height);
+
+        if (checkLevel().keys === 0){ // If no keys are present, the exit door will open
+          ctx.drawImage(door, tile.x, tile.y, tile.width, tile.height);
           if (player.itemCollision(tile)) player.nextLevel();
         }
       }

@@ -12,7 +12,11 @@ function update() {
   ctx.clearRect(0, 0, width, height); // CLears the canvas
   drawMap(currentMap); // Draws the tilemap
   playerMovement(); // Draws the character
+  player.score += (1/60);
   requestAnimationFrame(update);
 }
 
-window.onload = player.spawn(); update();
+window.onload = 
+  player.spawn();
+  update();
+  document.body.style.backgroundImage = 'url("./images/bkg1.jpg")';

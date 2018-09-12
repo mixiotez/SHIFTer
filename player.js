@@ -10,6 +10,9 @@ class Player {
     this.jumping = false; // This lets us know if the user can jump or not. Prevents infinite jumps.
     this.friction = 0.8; // This makes the players slide a bit instead of suddently stopping
     this.gravity = 0.3; // If player is not standing in a platform, gravity will pull them down
+    
+    // Score
+    this.score = 0;
   }
 
   draw(){
@@ -68,12 +71,14 @@ function playerMovement() {
   player.velY += player.gravity;
 
   // Changes between map layers
-  if (keys[65]) {
+  if (keys[65]) { // A
     currentMap = checkLevel().mapMain;
-    document.getElementsByTagName("body")[0].style.filter = "invert(0%)";
-  } if (keys[68]) {
+    document.body.style.backgroundImage = 'url("./images/bkg1.jpg")'; // Change background image
+  } 
+  if (keys[68]) { // D
     currentMap = checkLevel().mapAlt;
-    document.getElementsByTagName("body")[0].style.filter = "invert(100%)";}
+    document.body.style.backgroundImage = 'url("./images/bkg2.jpg")'; // Change background image
+  } 
 
    // Restart
   if (keys[82]) player.respawn(); // R
