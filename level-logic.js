@@ -29,7 +29,7 @@ function drawMap(m){
           width: tilesize,
           height: tilesize
         }
-        ctx.fillStyle = "#505050";
+        ctx.fillStyle = currentColor[0];
         ctx.fillRect(tile.x, tile.y, tile.width, tile.height);
         tileCollision(tile);
       }
@@ -41,7 +41,7 @@ function drawMap(m){
           width: tilesize,
           height: tilesize
         }
-        ctx.fillStyle = "#262626";
+        ctx.fillStyle = currentColor[1];
         ctx.fillRect(tile.x, tile.y, tile.width, tile.height);
       }
 
@@ -112,6 +112,19 @@ function drawMap(m){
     }
   }
 }
+
+// Provides a random color palette
+function chooseColor() {
+  let randomNumber = Math.floor(Math.random() * 5);
+
+  if (randomNumber === 4) return ["#CEBEBE", "#AD999B", "#818479"];
+  if (randomNumber === 3) return ["#E1E7E8", "#B9BCC0", "#8E8993"];
+  if (randomNumber === 2) return ["#DDC8C4", "#896A67", "#364652"];
+  if (randomNumber === 1) return ["#A3C9A8", "#84B59F", "#69A297"];
+  return ["#AAAE8E", "#828E82", "#607B7D"]
+}
+
+let currentColor = chooseColor();
 
 // Provides level to display and allows the player to change between the main map and the alternative one
 let levelCount = 1;

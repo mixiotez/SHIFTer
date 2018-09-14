@@ -11,12 +11,12 @@ class Player {
     this.friction = 0.8; // This makes the players slide a bit instead of suddently stopping
     this.gravity = 0.3; // If player is not standing in a platform, gravity will pull them down
     
-    // Score
-    this.score = 0;
+    // Time taken by player
+    this.time = 0;
   }
 
   draw(){
-    ctx.fillStyle = "white";
+    ctx.fillStyle = "#F0E7D8";
     ctx.fillRect(this.x, this.y, this.width, this.height);
   }
 
@@ -35,7 +35,10 @@ class Player {
   }
 
   respawn(){
+    currentColor = chooseColor(); // Changes color palette
     currentMap = checkLevel().mapMain;
+    document.body.style.backgroundColor = currentColor[2];
+
     this.x = undefined; // This makes the player disappear from the canvas by hidding it
     this.y = undefined;
 
@@ -73,11 +76,11 @@ function playerMovement() {
   // Changes between map layers
   if (keys[65]) { // A
     currentMap = checkLevel().mapMain;
-    document.body.style.backgroundImage = 'url("./images/bkg1.jpg")'; // Change background image
+    document.body.style.backgroundImage = document.body.style.backgroundColor = currentColor[2]; // Change background color
   } 
   if (keys[68]) { // D
     currentMap = checkLevel().mapAlt;
-    document.body.style.backgroundImage = 'url("./images/bkg2.jpg")'; // Change background image
+    document.body.style.backgroundImage = document.body.style.backgroundColor = currentColor[1]; // Change background color
   } 
 
    // Restart

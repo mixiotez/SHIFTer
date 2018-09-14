@@ -10,7 +10,33 @@
 </head>
 
 <body>
+  <nav>
+    <div id="menuToggle">
+      <span></span>
+      <span></span>
+      <span></span>
+      <input type="checkbox" />
+      <ul id="menu">
+
+        <li>
+          <button onclick="newGame()">Start</button>
+        </li>
+
+        <!-- <li>
+          <button onclick="tutorial()">Tutorial</button>
+        </li> -->
+
+      </ul>
+    </div>
+  </nav>
+  <div id="tutorial">
+  </div>
+  <!-- <div>
+    <img src="images/tut-01.png" alt="Please refer to tut-01 image">
+    <img src="images/tut-02.png" alt="Please refer to tut-02 image">
+  </div> -->
   <canvas id="canvas"></canvas>
+  <span id="timer">Time: <span id="time">0</span></span>
 </body>
 
 <script src="./levels.js"></script>
