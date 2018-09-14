@@ -85,3 +85,26 @@ canvas {
   right: 15%;
   top: 8%;
 }
+
+img {
+  display: none;
+  position: absolute;
+  right: 5%;
+  width: 43vw;
+}
+
+#slides button{
+  display: none;
+  font-size: 3rem;
+  color: white;
+  position: absolute;
+  top: 50vh;
+}
+
+#nextSlide {
+  left: 96vw;
+}
+
+#prevSlide {
+  left: 49vw;
+}

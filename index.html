@@ -5,6 +5,7 @@
   <meta charset="utf-8" />
   <title>SHIFTer</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
   <link rel="stylesheet" type="text/css" media="screen" href="./main.css" />
   <link rel="shortcut icon" href="./images/favicon.ico" />
 </head>
@@ -22,21 +23,23 @@
           <button onclick="newGame()">Start</button>
         </li>
 
-        <!-- <li>
-          <button onclick="tutorial()">Tutorial</button>
-        </li> -->
+        <li>
+        <button onclick="tutorial()">Tutorial</button>
+        </li>
 
       </ul>
     </div>
   </nav>
   <div id="tutorial">
   </div>
-  <!-- <div>
-    <img src="images/tut-01.png" alt="Please refer to tut-01 image">
-    <img src="images/tut-02.png" alt="Please refer to tut-02 image">
-  </div> -->
+  <div id="slides">
+    <button id="nextSlide" onclick="nextSlide()"><i class="fas fa-angle-right"></i></button>
+    <button id="prevSlide" onclick="prevSlide()"><i class="fas fa-angle-left"></i></button>
+    <img id="tut-01" src="images/tut-01.png" alt="Please refer to tut-01 image">
+    <img id="tut-02" src="images/tut-02.png" alt="Please refer to tut-02 image">
+  </div>
   <canvas id="canvas"></canvas>
-  <span id="timer">Time: <span id="time">0</span></span>
+  <span id="timer">Time: <span id="time">0</span> s</span>
 </body>
 
 <script src="./levels.js"></script>

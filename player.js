@@ -62,7 +62,7 @@ function playerMovement() {
     }
 
   if (keys[39]) if (player.velX < player.speed) player.velX++; // right
-  
+
   if (keys[37]) if (player.velX > -player.speed) player.velX--; // left
 
   if (player.velY !== 0) player.jumping = true; // This prevents the player from jumping mid-air when falling
@@ -131,7 +131,7 @@ function tileCollision(tile) {
       }
     }
   }
-  
+
   if (direction === "left" || direction === "right") player.velX = 0; // Prevents lateral movement
   if (direction === "bottom") {player.velY = 0; player.jumping = false;} // Prevents the player from getting inside the tile when jumping
   if (direction === "top") player.velY = 0; //  Maintains the player on tile

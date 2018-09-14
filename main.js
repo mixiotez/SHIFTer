@@ -27,8 +27,27 @@ function newGame() {
   canvas.style.margin = "0 25vw"; // Centers canvas
   timer.style.display = "block"; // Shows timer
 
+  document.getElementById("slides").style.display = "none";
+
   document.body.style.backgroundColor = currentColor[2];
   
   player.spawn();
   update();
+}
+
+function tutorial() {
+  document.getElementById("tut-01").style.display = "block";
+  document.getElementById("nextSlide").style.display = "block";
+}
+
+function nextSlide(){
+  document.getElementById("tut-02").style.display = "block";
+  document.getElementById("prevSlide").style.display = "block";
+  document.getElementById("nextSlide").style.display = "none";
+}
+
+function prevSlide(){
+  document.getElementById("tut-02").style.display = "none";
+  document.getElementById("prevSlide").style.display = "none";
+  document.getElementById("nextSlide").style.display = "block";
 }
