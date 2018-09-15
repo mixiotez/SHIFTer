@@ -1,0 +1,29 @@
+	Challenge
+
+Collisions
+
+
+	NEW methods learned/used
+
+Instead of using setInterval use requestAnimationFrame
+
+	BRAINSTORMING FEATURES AND THINGS TO DO
+
+	//Engine - MUST
+Main Menu
+Tutorial levels // instructions
+Two Player
+Scores
+
+	//Decoration
+Fake loading
+Animation (sprites)
+Define a color palette
+Backgroud details
+
+	//Extras and Challenges
+Trapped between blocks death
+Pause when changing layers
+Music and sounds - Mute
+Turn maps upside down or sideways (invert x and y)
+Breakable blocks

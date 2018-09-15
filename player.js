@@ -49,9 +49,15 @@ class Player {
 
   nextLevel(){
     levelCount++;
+    nLevel.play();
     this.respawn();
   }
 }
+
+const jumpSound = new Sound("./sounds/jump.mp3");
+const dieSound = new Sound("./sounds/die.mp3");
+const nLevel = new Sound("./sounds/nextLevel.mp3");
+const keySound = new Sound("./sounds/key.mp3")
 
 const keys = [];
 
@@ -59,6 +65,7 @@ function playerMovement() {
   if (keys[32] || keys[38]) if (!player.jumping) { // jump
       player.jumping = true;
       player.velY = -player.speed * 2.75;
+      jumpSound.play();
     }
 
   if (keys[39]) if (player.velX < player.speed) player.velX++; // right

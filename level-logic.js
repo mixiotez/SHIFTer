@@ -55,6 +55,7 @@ function drawMap(m){
         ctx.drawImage(saw, tile.x, tile.y, tile.height, tile.width)
         if (player.itemCollision(tile)) {
           player.respawn();
+          dieSound.play();
           checkLevel().keys++;
         }
       }
@@ -78,7 +79,10 @@ function drawMap(m){
             height: tilesize - 8
           }
           ctx.drawImage(key, tile.x, tile.y, tile.width, tile.height);
-          if (player.itemCollision(tile)) checkLevel().keys--;
+          if (player.itemCollision(tile)) {
+            checkLevel().keys--;
+            keySound.play();
+          }
         }
       }
 
@@ -137,4 +141,34 @@ function checkLevel(){
   if (levelCount === 4) return level4;
   if (levelCount === 5) return level5;
   if (levelCount === 6) return level6;
+  if (levelCount === 7) return playerWon();
+}
+
+// Win method
+
+function playerWon(){
+  let winPopUp = document.getElementById("winPopUp");
+  winPopUp.style.display = "block";
+  canvas.style.display = "none";
+}
+
+// Audio
+
+class Sound {
+  constructor(src){
+    this.sound = document.createElement("audio");
+    this.sound.src = src;
+    this.sound.setAttribute("preload", "auto");
+  }
+
+  play() {
+    this.sound.play();
+  }
+}
+
+function startMusic(){
+  const music = document.getElementById("music");
+  music.src = "./sounds/game.mp3";
+  music.autoplay = "true";
+  music.load();
 }

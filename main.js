@@ -30,6 +30,8 @@ function newGame() {
   document.getElementById("slides").style.display = "none";
 
   document.body.style.backgroundColor = currentColor[2];
+
+  startMusic();
   
   player.spawn();
   update();
