@@ -13,6 +13,9 @@ class Player {
     
     // Time taken by player
     this.time = 0;
+
+    // Indicates if the player's Y position was inverted
+    this.isYInverted = false;
   }
 
   draw(){
@@ -28,6 +31,7 @@ class Player {
   }
 
   spawn(){ // Checks what's the level's x and y spawn coordinates and assigns it to the player
+    this.isYInverted = false;
     this.velX = 0;
     this.velY = 0;
     this.x = checkLevel().spawnPoint[0];
@@ -35,7 +39,8 @@ class Player {
   }
 
   respawn(){
-    currentColor = chooseColor(); // Changes color palette
+    this.isYInverted = false;
+    currentColor = generateColor(); // Changes color palette
     currentMap = checkLevel().mapMain;
     document.body.style.backgroundColor = currentColor[2];
 
@@ -51,6 +56,13 @@ class Player {
     levelCount++;
     nLevel.load();
     this.respawn();
+  }
+
+  invertY(){
+    this.velY = 0;
+    this.y = canvas.width + player.height - player.y;
+    this.isYInverted = true;
+    currentMap = checkLevel().invertedY;
   }
 }
 
@@ -92,14 +104,23 @@ function playerMovement() {
   player.velY += player.gravity;
 
   // Changes between map layers
+
   if (keys[65]) { // A
-    currentMap = checkLevel().mapMain;
+    if (!player.isYInverted) {
+      currentMap = checkLevel().mapMain;
+    } else {
+      currentMap = checkLevel().invertedY;
+    }
     document.body.style.backgroundImage = document.body.style.backgroundColor = currentColor[2]; // Change background color
-  } 
+  }
   if (keys[68]) { // D
-    currentMap = checkLevel().mapAlt;
+    if (!player.isYInverted) {
+      currentMap = checkLevel().mapAlt;
+    } else {
+      currentMap = checkLevel().invertedYAlt;
+    }
     document.body.style.backgroundImage = document.body.style.backgroundColor = currentColor[1]; // Change background color
-  } 
+  }
 
    // Restart
   if (keys[82]) player.respawn(); // R
@@ -129,7 +150,7 @@ function tileCollision(tile) {
   // offsetX and offsetY - Figures out on which side we are colliding with (top, bottom, left, or right)
     const oX = hWidths - Math.abs(vX),
           oY = hHeights - Math.abs(vY);
-    var direction = undefined;
+    var direction;
 
     if (oX >= oY){
       if (vY > 0) {

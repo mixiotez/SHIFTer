@@ -1,23 +1,26 @@
 // Items
 const key = new Image();
-key.src = "./images/key.png"
+key.src = "./images/key.png";
 
 const hiddenKey = new Image();
-hiddenKey.src = "./images/key-hidden.png"
+hiddenKey.src = "./images/key-hidden.png";
 
 const door = new Image();
-door.src = "./images/door.png"
+door.src = "./images/door.png";
 
 const closedDoor = new Image();
-closedDoor.src = "./images/closedDoor.png"
+closedDoor.src = "./images/closedDoor.png";
 
 const saw = new Image();
-saw.src = "./images/saw.png"
+saw.src = "./images/saw.png";
 
 const hiddenSaw = new Image();
-hiddenSaw.src = "./images/saw-hidden.png"
+hiddenSaw.src = "./images/saw-hidden.png";
 
-// This fuction checks every value of the 2D array and returns an image
+const invertYArrow = new Image();
+invertYArrow.src = "./images/invertYArrow.png";
+
+// This function checks every value of the 2D array and returns an image
 function drawMap(m){
 
   for (let i = 0; i < m.length; i++) {
@@ -98,6 +101,19 @@ function drawMap(m){
         }
       }
 
+      if (m[i][j] === 7) {
+        let tile = {
+          x: tilesize * [j],
+          y: tilesize * [i] + 4,
+          width: tilesize,
+          height: tilesize - 6
+        }
+        ctx.drawImage(invertYArrow, tile.x, tile.y, tile.width, tile.height);
+        if (player.itemCollision(tile) && !player.isYInverted) {
+          player.invertY();
+        }
+      }
+
       if (m[i][j] === 8) {
         let tile = {
           x: tilesize * [j] + 2,
@@ -118,7 +134,7 @@ function drawMap(m){
 }
 
 // Provides a random color palette
-function chooseColor() {
+function generateColor() {
   let randomNumber = Math.floor(Math.random() * 5);
 
   if (randomNumber === 4) return ["#CEBEBE", "#AD999B", "#818479"];
@@ -128,7 +144,7 @@ function chooseColor() {
   return ["#AAAE8E", "#828E82", "#607B7D"]
 }
 
-let currentColor = chooseColor();
+let currentColor = generateColor();
 
 // Provides level to display and allows the player to change between the main map and the alternative one
 let levelCount = 1;
@@ -141,7 +157,9 @@ function checkLevel(){
   if (levelCount === 4) return level4;
   if (levelCount === 5) return level5;
   if (levelCount === 6) return level6;
-  if (levelCount === 7) return playerWon();
+  if (levelCount === 7) return level7;
+  if (levelCount === 8) return level8;
+  if (levelCount === 9) return playerWon();
 }
 
 // Win method

@@ -13,11 +13,11 @@ const player = new Player();
 let playerTime = document.getElementById("time");
 
 function update() {
-  ctx.clearRect(0, 0, width, height); // CLears the canvas
+  ctx.clearRect(0, 0, width, height); // Clears the canvas
   drawMap(currentMap); // Draws the tilemap
   playerMovement(); // Draws the character
   player.time += (1/60);
-  playerTime.innerHTML = Math.floor(player.time);
+  playerTime.innerHTML = Math.floor(player.time); // Update the timer
   requestAnimationFrame(update);
 }
 
