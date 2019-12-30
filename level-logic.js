@@ -25,7 +25,9 @@ function drawMap(m){
 
   for (let i = 0; i < m.length; i++) {
     for (let j = 0; j < m[i].length; j++) {
-      if (m[i][j] === 1) {
+      let currentTile = m[i][j];
+
+      if (currentTile === 1) {
         let tile = {
           x: tilesize * [j],
           y: tilesize * [i],
@@ -37,7 +39,7 @@ function drawMap(m){
         tileCollision(tile);
       }
 
-      if (m[i][j] === 2) {
+      if (currentTile === 2) {
         let tile = {
           x: tilesize * [j],
           y: tilesize * [i],
@@ -48,7 +50,7 @@ function drawMap(m){
         ctx.fillRect(tile.x, tile.y, tile.width, tile.height);
       }
 
-      if (m[i][j] === 3) {
+      if (currentTile === 3) {
         let tile = {
           x: tilesize * [j] + 2,
           y: tilesize * [i] + 4,
@@ -63,7 +65,7 @@ function drawMap(m){
         }
       }
 
-      if (m[i][j] === 4) {
+      if (currentTile === 4) {
         let tile = {
           x: tilesize * [j] + 2,
           y: tilesize * [i] + 4,
@@ -73,7 +75,7 @@ function drawMap(m){
         ctx.drawImage(hiddenSaw, tile.x, tile.y, tile.height, tile.width)
       }
 
-      if (m[i][j] === 5) {
+      if (currentTile === 5) {
         if (checkLevel().keys > 0){
           let tile = {
             x: tilesize * [j] + 4,
@@ -89,7 +91,7 @@ function drawMap(m){
         }
       }
 
-      if (m[i][j] === 6) {
+      if (currentTile === 6) {
         if (checkLevel().keys > 0){
           let tile = {
             x: tilesize * [j] + 4,
@@ -101,7 +103,7 @@ function drawMap(m){
         }
       }
 
-      if (m[i][j] === 7) {
+      if (currentTile === 7) {
         let tile = {
           x: tilesize * [j],
           y: tilesize * [i] + 4,
@@ -114,7 +116,7 @@ function drawMap(m){
         }
       }
 
-      if (m[i][j] === 8) {
+      if (currentTile === 8) {
         let tile = {
           x: tilesize * [j] + 2,
           y: tilesize * [i] + 2,
@@ -147,19 +149,31 @@ function generateColor() {
 let currentColor = generateColor();
 
 // Provides level to display and allows the player to change between the main map and the alternative one
-let levelCount = 1;
+let levelCount = 6;
 let currentMap = checkLevel().mapMain;
+createMaps();
 
 function checkLevel(){
-  if (levelCount === 1) return level1;
-  if (levelCount === 2) return level2;
-  if (levelCount === 3) return level3;
-  if (levelCount === 4) return level4;
-  if (levelCount === 5) return level5;
-  if (levelCount === 6) return level6;
-  if (levelCount === 7) return level7;
-  if (levelCount === 8) return level8;
-  if (levelCount === 9) return playerWon();
+  if(!levels[levelCount])
+    return playerWon();
+  
+  return levels[levelCount];
+}
+
+function invertMap(map) {
+  return [...map].reverse();
+}
+
+function createMaps() {
+  levels[0].mapAlt = levels[0].mapMain;
+  levels[1].mapAlt = levels[1].mapMain;
+
+  levels.forEach(level => {
+    if(level.hasInvertedY) {
+      level.invertedY = invertMap(level.mapMain);
+      level.invertedYAlt = invertMap(level.mapAlt);
+    }
+  })
 }
 
 // Win method
