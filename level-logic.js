@@ -137,19 +137,22 @@ function drawMap(m){
 
 // Provides a random color palette
 function generateColor() {
-  let randomNumber = Math.floor(Math.random() * 5);
+  const colorPalettes = [
+    ["#AAAE8E", "#828E82", "#607B7D"],
+    ["#A3C9A8", "#84B59F", "#69A297"],
+    ["#DDC8C4", "#896A67", "#364652"],
+    ["#E1E7E8", "#B9BCC0", "#8E8993"],
+    ["#CEBEBE", "#AD999B", "#818479"]
+  ];
+  let randomIndex = Math.floor(Math.random() * 5);
 
-  if (randomNumber === 4) return ["#CEBEBE", "#AD999B", "#818479"];
-  if (randomNumber === 3) return ["#E1E7E8", "#B9BCC0", "#8E8993"];
-  if (randomNumber === 2) return ["#DDC8C4", "#896A67", "#364652"];
-  if (randomNumber === 1) return ["#A3C9A8", "#84B59F", "#69A297"];
-  return ["#AAAE8E", "#828E82", "#607B7D"]
+  return colorPalettes[randomIndex];
 }
 
 let currentColor = generateColor();
 
 // Provides level to display and allows the player to change between the main map and the alternative one
-let levelCount = 6;
+let levelCount = 0;
 let currentMap = checkLevel().mapMain;
 createMaps();
 
@@ -182,6 +185,7 @@ function playerWon(){
   let winPopUp = document.getElementById("winPopUp");
   winPopUp.style.display = "block";
   canvas.style.display = "none";
+
 }
 
 // Audio

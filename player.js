@@ -7,8 +7,8 @@ class Player {
     this.velX = 0;
     this.velY = 0;
     this.speed = 2.5; // How fast the player can go
-    this.jumping = false; // This lets us know if the user can jump or not. Prevents infinite jumps.
-    this.friction = 0.8; // This makes the players slide a bit instead of suddently stopping
+    this.isJumping = false; // This lets us know if the user can jump or not. Prevents infinite jumps.
+    this.friction = 0.8; // This makes the players slide a bit instead of suddenly stopping
     this.gravity = 0.3; // If player is not standing in a platform, gravity will pull them down
     
     // Time taken by player
@@ -44,7 +44,7 @@ class Player {
     currentMap = checkLevel().mapMain;
     document.body.style.backgroundColor = currentColor[2];
 
-    this.x = undefined; // This makes the player disappear from the canvas by hidding it
+    this.x = undefined; // This makes the player disappear from the canvas by hiding it
     this.y = undefined;
 
     setTimeout(() => {
@@ -85,8 +85,8 @@ keySound.autoplay = "true";
 const keys = [];
 
 function playerMovement() {
-  if (keys[32] || keys[38]) if (!player.jumping) { // jump
-      player.jumping = true;
+  if (keys[32] || keys[38]) if (!player.isJumping) { // jump
+      player.isJumping = true;
       player.velY = -player.speed * 2.75;
       jumpSound.load();
     }
@@ -95,7 +95,7 @@ function playerMovement() {
 
   if (keys[37]) if (player.velX > -player.speed) player.velX--; // left
 
-  if (player.velY !== 0) player.jumping = true; // This prevents the player from jumping mid-air when falling
+  if (player.velY !== 0) player.isJumping = true; // This prevents the player from jumping mid-air when falling
 
   player.x += player.velX;
   player.y += player.velY;
@@ -172,6 +172,6 @@ function tileCollision(tile) {
   }
 
   if (direction === "left" || direction === "right") player.velX = 0; // Prevents lateral movement
-  if (direction === "bottom") {player.velY = 0; player.jumping = false;} // Prevents the player from getting inside the tile when jumping
+  if (direction === "bottom") {player.velY = 0; player.isJumping = false;} // Prevents the player from getting inside the tile when jumping
   if (direction === "top") player.velY = 0; //  Maintains the player on tile
 }
