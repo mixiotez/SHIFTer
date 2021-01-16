@@ -54,7 +54,7 @@ class Player {
 
   nextLevel(){
     levelCount++;
-    nLevel.load();
+    nextLevelSound.play();
     this.respawn();
   }
 
@@ -66,21 +66,10 @@ class Player {
   }
 }
 
-const jumpSound = document.getElementById("jump");
-jumpSound.src = "./sounds/jump.mp3";
-jumpSound.autoplay = "true";
-
-const dieSound = document.getElementById("die");
-dieSound.src = "./sounds/die.mp3";
-dieSound.autoplay = "true";
-
-const nLevel = document.getElementById("nextLevel");
-nLevel.src = "./sounds/nextLevel.mp3";
-nLevel.autoplay = "true";
-
-const keySound = document.getElementById("key");
-keySound.src = "./sounds/key.mp3";
-keySound.autoplay = "true";
+const jumpSound = new Audio("./sounds/jump.mp3");
+const dieSound = new Audio("./sounds/die.mp3")
+const nextLevelSound = new Audio("./sounds/nextLevel.mp3");
+const keySound = new Audio("./sounds/key.mp3");
 
 const keys = [];
 
@@ -88,7 +77,7 @@ function playerMovement() {
   if (keys[32] || keys[38]) if (!player.isJumping) { // jump
       player.isJumping = true;
       player.velY = -player.speed * 2.75;
-      jumpSound.load();
+      jumpSound.play();
     }
 
   if (keys[39]) if (player.velX < player.speed) player.velX++; // right

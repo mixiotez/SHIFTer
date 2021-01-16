@@ -60,7 +60,7 @@ function drawMap(m){
         ctx.drawImage(saw, tile.x, tile.y, tile.height, tile.width)
         if (player.itemCollision(tile)) {
           player.respawn();
-          dieSound.load();
+          dieSound.play();
           checkLevel().keys++;
         }
       }
@@ -86,7 +86,7 @@ function drawMap(m){
           ctx.drawImage(key, tile.x, tile.y, tile.width, tile.height);
           if (player.itemCollision(tile)) {
             checkLevel().keys--;
-            keySound.load();
+            keySound.play();
           }
         }
       }
@@ -194,5 +194,5 @@ function startMusic(){
   const music = document.getElementById("music");
   music.src = "./sounds/game.mp3";
   music.autoplay = "true";
-  music.load();
+  music.play();
 }
