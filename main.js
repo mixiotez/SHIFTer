@@ -1,6 +1,6 @@
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
-const mainMenu = document.getElementById("menuToggle");
+const mainMenu = document.getElementById("menu");
 const timer = document.getElementById("timer");
 const width = 480;
 const height = 480;
@@ -28,7 +28,7 @@ function newGame() {
   timer.style.display = "block"; // Shows timer
 
   document.getElementById("slides").style.display = "none";
-
+  document.body.style.animation = "none";
   document.body.style.backgroundColor = currentColor[2];
 
   startMusic();

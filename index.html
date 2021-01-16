@@ -11,43 +11,33 @@
 </head>
 
 <body>
-  <nav>
-    <div id="menuToggle">
-      <span></span>
-      <span></span>
-      <span></span>
-      <input type="checkbox" />
-      <ul id="menu">
-
-        <li>
-          <button onclick="newGame()">Start</button>
-        </li>
-
-        <li>
-        <button onclick="tutorial()">How to Play</button>
-        </li>
-
-      </ul>
+  
+  <main>
+    <div id="menu">
+      <h1 id="title">SHIFTer</h1>
+      <button onclick="newGame()">Start</button>
+      <button onclick="tutorial()">How to play</button>
     </div>
-  </nav>
-  <div id="tutorial">
-  </div>
-  <div id="slides">
-    <button id="nextSlide" onclick="nextSlide()"><i class="fas fa-angle-right"></i></button>
-    <button id="prevSlide" onclick="prevSlide()"><i class="fas fa-angle-left"></i></button>
-    <img id="tut-01" src="images/tut-01.png" alt="Please refer to tut-01 image">
-    <img id="tut-02" src="images/tut-02.png" alt="Please refer to tut-02 image">
-  </div>
+  
+    <div id="tutorial"></div>
+    <div id="slides">
+      <button id="nextSlide" onclick="nextSlide()"><i class="fas fa-angle-right"></i></button>
+      <button id="prevSlide" onclick="prevSlide()"><i class="fas fa-angle-left"></i></button>
+      <img id="tut-01" src="images/tut-01.png" alt="tutorial image 1">
+      <img id="tut-02" src="images/tut-02.png" alt="tutorial image 2">
+    </div>
 
-  <audio id="music" preload="metadata" loop="true" volume="0.8"></audio>
-  <audio id="jump" preload="metadata"></audio>
-  <audio id="die" preload="metadata"></audio>
-  <audio id="nextLevel" preload="metadata"></audio>
-  <audio id="key" preload="metadata"></audio>
+    <audio id="music" type="audio/mpeg" preload="metadata" loop="true" volume="0.8"></audio>
+    <audio id="jump" preload="metadata"></audio>
+    <audio id="die" preload="metadata"></audio>
+    <audio id="nextLevel" preload="metadata"></audio>
+    <audio id="key" preload="metadata"></audio>
 
-  <canvas id="canvas"></canvas>
-  <span id="winPopUp">Congratulations! You won :)</span>
-  <span id="timer">Time: <span id="time">0</span> s</span>
+    <canvas id="canvas"></canvas>
+
+    <span id="winPopUp">Congratulations! You won :)</span>
+    <span id="timer">Time: <span id="time">0</span> s</span>
+  </main>
 </body>
 
 <script src="./levels.js"></script>
