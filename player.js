@@ -10,7 +10,7 @@ class Player {
     this.isJumping = false; // This lets us know if the user can jump or not. Prevents infinite jumps.
     this.friction = 0.8; // This makes the players slide a bit instead of suddenly stopping
     this.gravity = 0.3; // If player is not standing in a platform, gravity will pull them down
-    
+
     // Time taken by player
     this.time = 0;
 
@@ -18,19 +18,23 @@ class Player {
     this.isYInverted = false;
   }
 
-  draw(){
+  draw() {
     ctx.fillStyle = "#F0E7D8";
     ctx.fillRect(this.x, this.y, this.width, this.height);
   }
 
-  itemCollision(item){ // Collision for grabbing items
-    return (this.x < item.x + item.width) &&
-        (this.x + this.width > item.x) &&
-        (this.y < item.y + item.height) &&
-        (this.y + this.height > item.y);
+  itemCollision(item) {
+    // Collision for grabbing items
+    return (
+      this.x < item.x + item.width &&
+      this.x + this.width > item.x &&
+      this.y < item.y + item.height &&
+      this.y + this.height > item.y
+    );
   }
 
-  spawn(){ // Checks what's the level's x and y spawn coordinates and assigns it to the player
+  spawn() {
+    // Checks what's the level's x and y spawn coordinates and assigns it to the player
     this.isYInverted = false;
     this.velX = 0;
     this.velY = 0;
@@ -38,7 +42,7 @@ class Player {
     this.y = checkLevel().spawnPoint[1];
   }
 
-  respawn(){
+  respawn() {
     this.isYInverted = false;
     currentColor = generateColor(); // Changes color palette
     currentMap = checkLevel().mapMain;
@@ -52,13 +56,13 @@ class Player {
     }, 500);
   }
 
-  nextLevel(){
+  nextLevel() {
     levelCount++;
     nextLevelSound.play();
     this.respawn();
   }
 
-  invertY(){
+  invertY() {
     this.velY = 0;
     this.y = canvas.width + player.height - player.y;
     this.isYInverted = true;
@@ -67,14 +71,16 @@ class Player {
 }
 
 const jumpSound = new Audio("./sounds/jump.mp3");
-const dieSound = new Audio("./sounds/die.mp3")
+const dieSound = new Audio("./sounds/die.mp3");
 const nextLevelSound = new Audio("./sounds/nextLevel.mp3");
 const keySound = new Audio("./sounds/key.mp3");
 
 const keys = [];
 
 function playerMovement() {
-  if (keys[32] || keys[38]) if (!player.isJumping) { // jump
+  if (keys[32] || keys[38])
+    if (!player.isJumping) {
+      // jump
       player.isJumping = true;
       player.velY = -player.speed * 2.75;
       jumpSound.play();
@@ -94,24 +100,28 @@ function playerMovement() {
 
   // Changes between map layers
 
-  if (keys[65]) { // A
+  if (keys[65]) {
+    // A
     if (!player.isYInverted) {
       currentMap = checkLevel().mapMain;
     } else {
       currentMap = checkLevel().invertedY;
     }
-    document.body.style.backgroundImage = document.body.style.backgroundColor = currentColor[2]; // Change background color
+    document.body.style.backgroundImage = document.body.style.backgroundColor =
+      currentColor[2]; // Change background color
   }
-  if (keys[68]) { // D
+  if (keys[68]) {
+    // D
     if (!player.isYInverted) {
       currentMap = checkLevel().mapAlt;
     } else {
       currentMap = checkLevel().invertedYAlt;
     }
-    document.body.style.backgroundImage = document.body.style.backgroundColor = currentColor[1]; // Change background color
+    document.body.style.backgroundImage = document.body.style.backgroundColor =
+      currentColor[1]; // Change background color
   }
 
-   // Restart
+  // Restart
   if (keys[82]) player.respawn(); // R
 
   player.draw();
@@ -127,21 +137,19 @@ document.body.onkeyup = (e) => {
 
 function tileCollision(tile) {
   const vX = player.x + player.width / 2 - (tile.x + tile.width / 2),
-        vY = player.y + player.height / 2 - (tile.y + tile.height / 2),
-
-  // Add the half widths and half heights of the objects
+    vY = player.y + player.height / 2 - (tile.y + tile.height / 2),
+    // Add the half widths and half heights of the objects
     hWidths = player.width / 2 + tile.width / 2,
     hHeights = player.height / 2 + tile.height / 2;
 
   // If the player and the tile are less than the half width or half height, then we must be inside the tile, causing a collision
   if (Math.abs(vX) < hWidths && Math.abs(vY) < hHeights) {
-
-  // offsetX and offsetY - Figures out on which side we are colliding with (top, bottom, left, or right)
+    // offsetX and offsetY - Figures out on which side we are colliding with (top, bottom, left, or right)
     const oX = hWidths - Math.abs(vX),
-          oY = hHeights - Math.abs(vY);
+      oY = hHeights - Math.abs(vY);
     var direction;
 
-    if (oX >= oY){
+    if (oX >= oY) {
       if (vY > 0) {
         direction = "top";
         player.y += oY;
@@ -161,6 +169,9 @@ function tileCollision(tile) {
   }
 
   if (direction === "left" || direction === "right") player.velX = 0; // Prevents lateral movement
-  if (direction === "bottom") {player.velY = 0; player.isJumping = false;} // Prevents the player from getting inside the tile when jumping
+  if (direction === "bottom") {
+    player.velY = 0;
+    player.isJumping = false;
+  } // Prevents the player from getting inside the tile when jumping
   if (direction === "top") player.velY = 0; //  Maintains the player on tile
 }

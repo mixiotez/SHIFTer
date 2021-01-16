@@ -21,8 +21,7 @@ const invertYArrow = new Image();
 invertYArrow.src = "./images/invertYArrow.png";
 
 // This function checks every value of the 2D array and returns an image
-function drawMap(m){
-
+function drawMap(m) {
   for (let i = 0; i < m.length; i++) {
     for (let j = 0; j < m[i].length; j++) {
       let currentTile = m[i][j];
@@ -32,8 +31,8 @@ function drawMap(m){
           x: tilesize * [j],
           y: tilesize * [i],
           width: tilesize,
-          height: tilesize
-        }
+          height: tilesize,
+        };
         ctx.fillStyle = currentColor[0];
         ctx.fillRect(tile.x, tile.y, tile.width, tile.height);
         tileCollision(tile);
@@ -44,8 +43,8 @@ function drawMap(m){
           x: tilesize * [j],
           y: tilesize * [i],
           width: tilesize,
-          height: tilesize
-        }
+          height: tilesize,
+        };
         ctx.fillStyle = currentColor[1];
         ctx.fillRect(tile.x, tile.y, tile.width, tile.height);
       }
@@ -55,9 +54,9 @@ function drawMap(m){
           x: tilesize * [j] + 2,
           y: tilesize * [i] + 4,
           width: tilesize - 4,
-          height: tilesize - 4
-        }
-        ctx.drawImage(saw, tile.x, tile.y, tile.height, tile.width)
+          height: tilesize - 4,
+        };
+        ctx.drawImage(saw, tile.x, tile.y, tile.height, tile.width);
         if (player.itemCollision(tile)) {
           player.respawn();
           dieSound.play();
@@ -70,19 +69,19 @@ function drawMap(m){
           x: tilesize * [j] + 2,
           y: tilesize * [i] + 4,
           width: tilesize - 4,
-          height: tilesize - 4
-        }
-        ctx.drawImage(hiddenSaw, tile.x, tile.y, tile.height, tile.width)
+          height: tilesize - 4,
+        };
+        ctx.drawImage(hiddenSaw, tile.x, tile.y, tile.height, tile.width);
       }
 
       if (currentTile === 5) {
-        if (checkLevel().keys > 0){
+        if (checkLevel().keys > 0) {
           let tile = {
             x: tilesize * [j] + 4,
             y: tilesize * [i] + 8,
             width: tilesize - 8,
-            height: tilesize - 8
-          }
+            height: tilesize - 8,
+          };
           ctx.drawImage(key, tile.x, tile.y, tile.width, tile.height);
           if (player.itemCollision(tile)) {
             checkLevel().keys--;
@@ -92,13 +91,13 @@ function drawMap(m){
       }
 
       if (currentTile === 6) {
-        if (checkLevel().keys > 0){
+        if (checkLevel().keys > 0) {
           let tile = {
             x: tilesize * [j] + 4,
             y: tilesize * [i] + 8,
             width: tilesize - 8,
-            height: tilesize - 8
-          }
+            height: tilesize - 8,
+          };
           ctx.drawImage(hiddenKey, tile.x, tile.y, tile.width, tile.height);
         }
       }
@@ -108,8 +107,8 @@ function drawMap(m){
           x: tilesize * [j],
           y: tilesize * [i] + 4,
           width: tilesize,
-          height: tilesize - 6
-        }
+          height: tilesize - 6,
+        };
         ctx.drawImage(invertYArrow, tile.x, tile.y, tile.width, tile.height);
         if (player.itemCollision(tile) && !player.isYInverted) {
           player.invertY();
@@ -121,12 +120,14 @@ function drawMap(m){
           x: tilesize * [j] + 2,
           y: tilesize * [i] + 2,
           width: tilesize - 4,
-          height: tilesize - 4
-        }
+          height: tilesize - 4,
+        };
         // If there are keys in the room, the door will remain closed
-        if (checkLevel().keys !== 0) ctx.drawImage(closedDoor, tile.x, tile.y, tile.width, tile.height);
+        if (checkLevel().keys !== 0)
+          ctx.drawImage(closedDoor, tile.x, tile.y, tile.width, tile.height);
 
-        if (checkLevel().keys === 0){ // If no keys are present, the exit door will open
+        if (checkLevel().keys === 0) {
+          // If no keys are present, the exit door will open
           ctx.drawImage(door, tile.x, tile.y, tile.width, tile.height);
           if (player.itemCollision(tile)) player.nextLevel();
         }
@@ -142,7 +143,7 @@ function generateColor() {
     ["#A3C9A8", "#84B59F", "#69A297"],
     ["#DDC8C4", "#896A67", "#364652"],
     ["#E1E7E8", "#B9BCC0", "#8E8993"],
-    ["#CEBEBE", "#AD999B", "#818479"]
+    ["#CEBEBE", "#AD999B", "#818479"],
   ];
   let randomIndex = Math.floor(Math.random() * 5);
 
@@ -156,10 +157,9 @@ let levelCount = 0;
 let currentMap = checkLevel().mapMain;
 createMaps();
 
-function checkLevel(){
-  if(!levels[levelCount])
-    return playerWon();
-  
+function checkLevel() {
+  if (!levels[levelCount]) return playerWon();
+
   return levels[levelCount];
 }
 
@@ -171,26 +171,25 @@ function createMaps() {
   levels[0].mapAlt = levels[0].mapMain;
   levels[1].mapAlt = levels[1].mapMain;
 
-  levels.forEach(level => {
-    if(level.hasInvertedY) {
+  levels.forEach((level) => {
+    if (level.hasInvertedY) {
       level.invertedY = invertMap(level.mapMain);
       level.invertedYAlt = invertMap(level.mapAlt);
     }
-  })
+  });
 }
 
 // Win method
 
-function playerWon(){
+function playerWon() {
   let winPopUp = document.getElementById("winPopUp");
   winPopUp.style.display = "block";
   canvas.style.display = "none";
-
 }
 
 // Audio
 
-function startMusic(){
+function startMusic() {
   const music = document.getElementById("music");
   music.src = "./sounds/game.mp3";
   music.autoplay = "true";

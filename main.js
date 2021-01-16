@@ -16,7 +16,7 @@ function update() {
   ctx.clearRect(0, 0, width, height); // Clears the canvas
   drawMap(currentMap); // Draws the tilemap
   playerMovement(); // Draws the character
-  player.time += (1/60);
+  player.time += 1 / 60;
   playerTime.innerHTML = Math.floor(player.time); // Update the timer
   requestAnimationFrame(update);
 }
@@ -32,7 +32,7 @@ function newGame() {
   document.body.style.backgroundColor = currentColor[2];
 
   startMusic();
-  
+
   player.spawn();
   update();
 }
@@ -42,13 +42,13 @@ function tutorial() {
   document.getElementById("nextSlide").style.display = "block";
 }
 
-function nextSlide(){
+function nextSlide() {
   document.getElementById("tut-02").style.display = "block";
   document.getElementById("prevSlide").style.display = "block";
   document.getElementById("nextSlide").style.display = "none";
 }
 
-function prevSlide(){
+function prevSlide() {
   document.getElementById("tut-02").style.display = "none";
   document.getElementById("prevSlide").style.display = "none";
   document.getElementById("nextSlide").style.display = "block";

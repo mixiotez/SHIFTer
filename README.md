@@ -24,7 +24,6 @@ Most levels have two layers. Lighter colored tiles are walkable, while darker co
 
 You must switch between layers to solve the puzzle. Use "A" and "D" to switch between layers.
 
-
 # MUSIC
 
 All sounds were created by me
