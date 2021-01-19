@@ -13,6 +13,11 @@ body {
   animation: backgroundColorTransition 8s infinite;
   display: block;
   font-family: "Avenir", sans-serif;
+  overflow: hidden;
+}
+
+.hidden {
+  display: none !important;
 }
 
 .mobileOnly,
@@ -54,14 +59,21 @@ button:hover {
   text-decoration: underline;
 }
 
-#menu {
-  animation: initialFadeIn 1s;
-  display: flex;
-  flex-direction: column;
+.centered {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+}
+
+p {
+  font-size: 2.25rem;
+}
+
+#menu {
+  animation: initialFadeIn 1s;
+  display: flex;
+  flex-direction: column;
 }
 
 #menu button,
@@ -73,15 +85,25 @@ button:hover {
   font-size: 2.25rem;
 }
 
+#navigationTutorial,
+#layersTutorial {
+  background-color: rgba(0, 0, 0, 0.25);
+  color: rgba(255, 255, 255, 0.75);
+  cursor: default;
+  max-width: 35%;
+  padding: 1rem;
+  top: 35%;
+  transform: translate(-50%, -35%);
+  user-select: none;
+}
+
 canvas {
-  display: none;
   background-color: #3a606e;
-  width: 100vh;
-  height: 100vh;
+  height: 100%;
+  z-index: -1;
 }
 
 #timer {
-  display: none;
   background-color: rgba(255, 255, 255, 0.25);
   padding: 1rem;
   position: absolute;
@@ -91,31 +113,7 @@ canvas {
   top: 8%;
 }
 
-img {
-  display: none;
-  position: absolute;
-  right: 5%;
-  width: 43vw;
-}
-
-#slides button {
-  display: none;
-  font-size: 3rem;
-  color: white;
-  position: absolute;
-  top: 50vh;
-}
-
-#nextSlide {
-  left: 96vw;
-}
-
-#prevSlide {
-  left: 49vw;
-}
-
 #winPopUp {
-  display: none;
   color: white;
   background-color: rgba(255, 255, 255, 0.2);
   font-size: 2rem;

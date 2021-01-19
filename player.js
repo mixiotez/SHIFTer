@@ -60,6 +60,20 @@ class Player {
     levelCount++;
     nextLevelSound.play();
     this.respawn();
+
+    switch (levelCount) {
+      case 1:
+        navigationTutorial.classList.add("hidden");
+        break;
+
+      case 2:
+        layersTutorial.classList.remove("hidden");
+        break;
+
+      case 3:
+        layersTutorial.classList.add("hidden");
+        break;
+    }
   }
 
   invertY() {

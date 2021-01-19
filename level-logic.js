@@ -182,8 +182,7 @@ function createMaps() {
 // Win method
 
 function playerWon() {
-  let winPopUp = document.getElementById("winPopUp");
-  winPopUp.style.display = "block";
+  document.getElementById("winPopUp").classList.remove("hidden");
   canvas.style.display = "none";
 }
 
