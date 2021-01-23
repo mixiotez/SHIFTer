@@ -11,7 +11,7 @@
 
 // Levels
 
-const tilesize = 32;
+const tileSize = 32;
 
 const levels = [
   level1 = {

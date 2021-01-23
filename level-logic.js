@@ -1,3 +1,8 @@
+// Initialize level
+let levelCount = 0;
+let currentLevel = levels[levelCount];
+let currentMap = currentLevel.mapMain;
+
 // Items
 const key = new Image();
 key.src = "./images/key.png";
@@ -28,10 +33,10 @@ function drawMap(m) {
 
       if (currentTile === 1) {
         let tile = {
-          x: tilesize * [j],
-          y: tilesize * [i],
-          width: tilesize,
-          height: tilesize,
+          x: tileSize * [j],
+          y: tileSize * [i],
+          width: tileSize,
+          height: tileSize,
         };
         ctx.fillStyle = currentColor[0];
         ctx.fillRect(tile.x, tile.y, tile.width, tile.height);
@@ -40,10 +45,10 @@ function drawMap(m) {
 
       if (currentTile === 2) {
         let tile = {
-          x: tilesize * [j],
-          y: tilesize * [i],
-          width: tilesize,
-          height: tilesize,
+          x: tileSize * [j],
+          y: tileSize * [i],
+          width: tileSize,
+          height: tileSize,
         };
         ctx.fillStyle = currentColor[1];
         ctx.fillRect(tile.x, tile.y, tile.width, tile.height);
@@ -51,52 +56,52 @@ function drawMap(m) {
 
       if (currentTile === 3) {
         let tile = {
-          x: tilesize * [j] + 2,
-          y: tilesize * [i] + 4,
-          width: tilesize - 4,
-          height: tilesize - 4,
+          x: tileSize * [j] + 2,
+          y: tileSize * [i] + 4,
+          width: tileSize - 4,
+          height: tileSize - 4,
         };
         ctx.drawImage(saw, tile.x, tile.y, tile.height, tile.width);
         if (player.itemCollision(tile)) {
           player.respawn();
           dieSound.play();
-          checkLevel().keys++;
+          currentLevel.keys++;
         }
       }
 
       if (currentTile === 4) {
         let tile = {
-          x: tilesize * [j] + 2,
-          y: tilesize * [i] + 4,
-          width: tilesize - 4,
-          height: tilesize - 4,
+          x: tileSize * [j] + 2,
+          y: tileSize * [i] + 4,
+          width: tileSize - 4,
+          height: tileSize - 4,
         };
         ctx.drawImage(hiddenSaw, tile.x, tile.y, tile.height, tile.width);
       }
 
       if (currentTile === 5) {
-        if (checkLevel().keys > 0) {
+        if (currentLevel.keys) {
           let tile = {
-            x: tilesize * [j] + 4,
-            y: tilesize * [i] + 8,
-            width: tilesize - 8,
-            height: tilesize - 8,
+            x: tileSize * [j] + 4,
+            y: tileSize * [i] + 8,
+            width: tileSize - 8,
+            height: tileSize - 8,
           };
           ctx.drawImage(key, tile.x, tile.y, tile.width, tile.height);
           if (player.itemCollision(tile)) {
-            checkLevel().keys--;
+            currentLevel.keys--;
             keySound.play();
           }
         }
       }
 
       if (currentTile === 6) {
-        if (checkLevel().keys > 0) {
+        if (currentLevel.keys) {
           let tile = {
-            x: tilesize * [j] + 4,
-            y: tilesize * [i] + 8,
-            width: tilesize - 8,
-            height: tilesize - 8,
+            x: tileSize * [j] + 4,
+            y: tileSize * [i] + 8,
+            width: tileSize - 8,
+            height: tileSize - 8,
           };
           ctx.drawImage(hiddenKey, tile.x, tile.y, tile.width, tile.height);
         }
@@ -104,10 +109,10 @@ function drawMap(m) {
 
       if (currentTile === 7) {
         let tile = {
-          x: tilesize * [j],
-          y: tilesize * [i] + 4,
-          width: tilesize,
-          height: tilesize - 6,
+          x: tileSize * [j],
+          y: tileSize * [i] + 4,
+          width: tileSize,
+          height: tileSize - 6,
         };
         ctx.drawImage(invertYArrow, tile.x, tile.y, tile.width, tile.height);
         if (player.itemCollision(tile) && !player.isYInverted) {
@@ -117,16 +122,15 @@ function drawMap(m) {
 
       if (currentTile === 8) {
         let tile = {
-          x: tilesize * [j] + 2,
-          y: tilesize * [i] + 2,
-          width: tilesize - 4,
-          height: tilesize - 4,
+          x: tileSize * [j] + 2,
+          y: tileSize * [i] + 2,
+          width: tileSize - 4,
+          height: tileSize - 4,
         };
         // If there are keys in the room, the door will remain closed
-        if (checkLevel().keys !== 0)
+        if (currentLevel.keys)
           ctx.drawImage(closedDoor, tile.x, tile.y, tile.width, tile.height);
-
-        if (checkLevel().keys === 0) {
+        else {
           // If no keys are present, the exit door will open
           ctx.drawImage(door, tile.x, tile.y, tile.width, tile.height);
           if (player.itemCollision(tile)) player.nextLevel();
@@ -136,32 +140,23 @@ function drawMap(m) {
   }
 }
 
+// Primary | Secondary | Body Background
+const colorPalettes = [
+  ["#AAAE8E", "#828E82", "#607B7D"],
+  ["#A3C9A8", "#84B59F", "#69A297"],
+  ["#DDC8C4", "#896A67", "#364652"],
+  ["#E1E7E8", "#B9BCC0", "#8E8993"],
+  ["#CEBEBE", "#AD999B", "#818479"],
+];
+
 // Provides a random color palette
 function generateColor() {
-  const colorPalettes = [
-    ["#AAAE8E", "#828E82", "#607B7D"],
-    ["#A3C9A8", "#84B59F", "#69A297"],
-    ["#DDC8C4", "#896A67", "#364652"],
-    ["#E1E7E8", "#B9BCC0", "#8E8993"],
-    ["#CEBEBE", "#AD999B", "#818479"],
-  ];
-  let randomIndex = Math.floor(Math.random() * 5);
+  const randomIndex = Math.floor(Math.random() * 5);
 
   return colorPalettes[randomIndex];
 }
 
 let currentColor = generateColor();
-
-// Provides level to display and allows the player to change between the main map and the alternative one
-let levelCount = 0;
-let currentMap = checkLevel().mapMain;
-createMaps();
-
-function checkLevel() {
-  if (!levels[levelCount]) return playerWon();
-
-  return levels[levelCount];
-}
 
 function invertMap(map) {
   return [...map].reverse();
@@ -179,15 +174,15 @@ function createMaps() {
   });
 }
 
-// Win method
+createMaps();
 
+// Win method
 function playerWon() {
   document.getElementById("winPopUp").classList.remove("hidden");
   canvas.style.display = "none";
 }
 
 // Audio
-
 function startMusic() {
   const music = document.getElementById("music");
   music.src = "./sounds/game.mp3";

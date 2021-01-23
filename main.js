@@ -7,30 +7,31 @@ canvas.width = width;
 canvas.height = height;
 
 const player = new Player();
-
-let playerTime = document.getElementById("time");
+let pause = false;
 
 function update() {
   ctx.clearRect(0, 0, width, height); // Clears the canvas
   drawMap(currentMap); // Draws the tilemap
   playerMovement(); // Draws the character
   player.time += 1 / 60;
-  playerTime.innerHTML = Math.floor(player.time); // Update the timer
-  requestAnimationFrame(update);
+  document.getElementById("time").innerHTML = Math.floor(player.time); // Update the timer
+
+  if (!pause) requestAnimationFrame(update);
 }
 
 const mainMenu = document.getElementById("menu");
 const timer = document.getElementById("timer");
 const navigationTutorial = document.getElementById("navigationTutorial");
 const layersTutorial = document.getElementById("layersTutorial");
+const bodyStyle = document.body.style;
 
 function newGame() {
   mainMenu.classList.add("hidden");
   canvas.classList.remove("hidden");
   timer.classList.remove("hidden");
 
-  document.body.classList.animation = "none";
-  document.body.classList.backgroundColor = currentColor[2];
+  bodyStyle.animation = "none";
+  bodyStyle.backgroundColor = currentColor[2];
   navigationTutorial.classList.remove("hidden");
 
   startMusic();

@@ -38,15 +38,15 @@ class Player {
     this.isYInverted = false;
     this.velX = 0;
     this.velY = 0;
-    this.x = checkLevel().spawnPoint[0];
-    this.y = checkLevel().spawnPoint[1];
+    this.x = currentLevel.spawnPoint[0];
+    this.y = currentLevel.spawnPoint[1];
   }
 
   respawn() {
     this.isYInverted = false;
     currentColor = generateColor(); // Changes color palette
-    currentMap = checkLevel().mapMain;
-    document.body.style.backgroundColor = currentColor[2];
+    currentMap = currentLevel.mapMain;
+    bodyStyle.backgroundColor = currentColor[2];
 
     this.x = undefined; // This makes the player disappear from the canvas by hiding it
     this.y = undefined;
@@ -58,8 +58,6 @@ class Player {
 
   nextLevel() {
     levelCount++;
-    nextLevelSound.play();
-    this.respawn();
 
     switch (levelCount) {
       case 1:
@@ -73,14 +71,22 @@ class Player {
       case 3:
         layersTutorial.classList.add("hidden");
         break;
+
+      case 8:
+        pause = true;
+        return playerWon();
     }
+
+    currentLevel = levels[levelCount];
+    nextLevelSound.play();
+    this.respawn();
   }
 
   invertY() {
     this.velY = 0;
     this.y = canvas.width + player.height - player.y;
     this.isYInverted = true;
-    currentMap = checkLevel().invertedY;
+    currentMap = currentLevel.invertedY;
   }
 }
 
@@ -117,26 +123,24 @@ function playerMovement() {
   if (keys[65]) {
     // A
     if (!player.isYInverted) {
-      currentMap = checkLevel().mapMain;
+      currentMap = currentLevel.mapMain;
     } else {
-      currentMap = checkLevel().invertedY;
+      currentMap = currentLevel.invertedY;
     }
-    document.body.style.backgroundImage = document.body.style.backgroundColor =
-      currentColor[2]; // Change background color
+    bodyStyle.backgroundImage = bodyStyle.backgroundColor = currentColor[2]; // Change background color
   }
   if (keys[68]) {
     // D
     if (!player.isYInverted) {
-      currentMap = checkLevel().mapAlt;
+      currentMap = currentLevel.mapAlt;
     } else {
-      currentMap = checkLevel().invertedYAlt;
+      currentMap = currentLevel.invertedYAlt;
     }
-    document.body.style.backgroundImage = document.body.style.backgroundColor =
-      currentColor[1]; // Change background color
+    bodyStyle.backgroundImage = bodyStyle.backgroundColor = currentColor[1]; // Change background color
   }
 
-  // Restart
-  if (keys[82]) player.respawn(); // R
+  // Restart (testing purposes, not actually used in the game)
+  if (keys[82]) player.respawn();
 
   player.draw();
 }
@@ -153,31 +157,31 @@ function tileCollision(tile) {
   const vX = player.x + player.width / 2 - (tile.x + tile.width / 2),
     vY = player.y + player.height / 2 - (tile.y + tile.height / 2),
     // Add the half widths and half heights of the objects
-    hWidths = player.width / 2 + tile.width / 2,
-    hHeights = player.height / 2 + tile.height / 2;
+    halfWidths = player.width / 2 + tile.width / 2,
+    halfHeights = player.height / 2 + tile.height / 2;
 
   // If the player and the tile are less than the half width or half height, then we must be inside the tile, causing a collision
-  if (Math.abs(vX) < hWidths && Math.abs(vY) < hHeights) {
+  if (Math.abs(vX) < halfWidths && Math.abs(vY) < halfHeights) {
     // offsetX and offsetY - Figures out on which side we are colliding with (top, bottom, left, or right)
-    const oX = hWidths - Math.abs(vX),
-      oY = hHeights - Math.abs(vY);
+    const offsetX = halfWidths - Math.abs(vX),
+      offsetY = halfHeights - Math.abs(vY);
     var direction;
 
-    if (oX >= oY) {
+    if (offsetX >= offsetY) {
       if (vY > 0) {
         direction = "top";
-        player.y += oY;
+        player.y += offsetY;
       } else {
         direction = "bottom";
-        player.y -= oY;
+        player.y -= offsetY;
       }
     } else {
       if (vX > 0) {
         direction = "left";
-        player.x += oX;
+        player.x += offsetX;
       } else {
         direction = "right";
-        player.x -= oX;
+        player.x -= offsetX;
       }
     }
   }
