@@ -30,7 +30,7 @@ function newGame() {
   canvas.classList.remove("hidden");
   timer.classList.remove("hidden");
 
-  bodyStyle.animation = "none";
+  bodyStyle.animationName = undefined;
   bodyStyle.backgroundColor = currentColor[2];
   navigationTutorial.classList.remove("hidden");
 

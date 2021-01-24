@@ -33,12 +33,24 @@
         loop="true"
         volume="0.8"
       ></audio>
+      <p class="hidden" id="timer">Time: <span id="time">0</span> s</p>
+      <div class="hidden centered" id="winPopUp">
+        <h1>Congratulations!</h1>
+        <p>Thank you for playing</p>
+        <p>Hope you had fun</p>
+      </div>
 
       <canvas class="hidden centered" id="canvas"></canvas>
-
-      <p class="hidden" id="winPopUp">Congratulations! You won :)</p>
-      <p class="hidden" id="timer">Time: <span id="time">0</span> s</p>
     </main>
+    <footer>
+      Created with ❤️ by
+      <a
+        href="https://github.com/mikempala"
+        rel="noopener noreferrer"
+        target="_blank"
+        >Miguel Téllez</a
+      >
+    </footer>
   </body>
 
   <script src="./levels.js"></script>

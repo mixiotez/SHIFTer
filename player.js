@@ -73,7 +73,6 @@ class Player {
         break;
 
       case 8:
-        pause = true;
         return playerWon();
     }
 

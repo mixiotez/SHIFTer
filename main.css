@@ -11,7 +11,6 @@ body {
 
 body {
   animation: backgroundColorTransition 8s infinite;
-  display: block;
   font-family: "Avenir", sans-serif;
   overflow: hidden;
 }
@@ -66,7 +65,8 @@ button:hover {
   transform: translate(-50%, -50%);
 }
 
-p {
+p,
+button {
   font-size: 2.25rem;
 }
 
@@ -82,7 +82,6 @@ p {
   align-self: flex-end;
   margin-top: 0.5rem;
   padding: 0.5rem;
-  font-size: 2.25rem;
 }
 
 #navigationTutorial,
@@ -103,24 +102,31 @@ canvas {
   z-index: -1;
 }
 
+footer,
 #timer {
-  background-color: rgba(255, 255, 255, 0.25);
-  padding: 1rem;
-  position: absolute;
-  color: #f0e7d8;
-  font-size: 2rem;
-  right: 15%;
-  top: 8%;
+  background-color: rgba(255, 255, 255, 0.5);
+  color: rgba(0, 0, 0, 0.75);
+  font-weight: bold;
+  padding: 0.5rem;
+  text-align: center;
+}
+
+footer {
+  bottom: 0;
+  position: fixed;
+  width: 100%;
 }
 
 #winPopUp {
+  background-color: rgba(0, 0, 0, 0.25);
   color: white;
-  background-color: rgba(255, 255, 255, 0.2);
-  font-size: 2rem;
-  width: 100vh;
-  height: 100vh;
-  line-height: 5.5;
+  padding: 3rem;
   text-align: center;
+}
+
+#winPopUp h1 {
+  font-size: 3.5rem;
+  padding-bottom: 1rem;
 }
 
 @keyframes backgroundColorTransition {

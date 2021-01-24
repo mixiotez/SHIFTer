@@ -178,7 +178,10 @@ createMaps();
 
 // Win method
 function playerWon() {
+  pause = true;
+  bodyStyle.animationName = "backgroundColorTransition";
   document.getElementById("winPopUp").classList.remove("hidden");
+  document.querySelector("footer").style.fontSize = "3rem";
   canvas.style.display = "none";
 }
 
