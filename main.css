@@ -55,7 +55,6 @@ button {
 
 button:hover {
   cursor: pointer;
-  text-decoration: underline;
 }
 
 .centered {
@@ -74,6 +73,10 @@ button {
   animation: initialFadeIn 1s;
   display: flex;
   flex-direction: column;
+}
+
+#menu button:hover {
+  text-decoration: underline;
 }
 
 #menu button,
@@ -109,6 +112,12 @@ footer,
   font-weight: bold;
   padding: 0.5rem;
   text-align: center;
+}
+
+#mute {
+  position: absolute;
+  right: 1rem;
+  padding: 0.5rem;
 }
 
 footer {

@@ -89,10 +89,15 @@ class Player {
   }
 }
 
+const music = new Audio("./sounds/game.mp3");
+music.level = 0.8;
+music.loop = true;
+
 const jumpSound = new Audio("./sounds/jump.mp3");
 const dieSound = new Audio("./sounds/die.mp3");
 const nextLevelSound = new Audio("./sounds/nextLevel.mp3");
 const keySound = new Audio("./sounds/key.mp3");
+const sounds = [music, jumpSound, dieSound, nextLevelSound, keySound];
 
 const keys = [];
 

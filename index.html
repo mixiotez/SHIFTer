@@ -26,14 +26,11 @@
         <p>Use "A" and "D" to switch between them</p>
       </div>
 
-      <audio
-        id="music"
-        type="audio/mpeg"
-        preload="metadata"
-        loop="true"
-        volume="0.8"
-      ></audio>
-      <p class="hidden" id="timer">Time: <span id="time">0</span> s</p>
+      <div class="hidden" id="topBar">
+        <button id="mute" onclick="toggleMute()" value="unmuted">🔇</button>
+        <p id="timer">Time: <span id="time">0</span> s</p>
+      </div>
+
       <div class="hidden centered" id="winPopUp">
         <h1>Congratulations!</h1>
         <p>Thank you for playing</p>

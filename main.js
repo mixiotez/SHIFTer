@@ -20,7 +20,8 @@ function update() {
 }
 
 const mainMenu = document.getElementById("menu");
-const timer = document.getElementById("timer");
+const topBar = document.getElementById("topBar");
+const mute = document.getElementById("mute");
 const navigationTutorial = document.getElementById("navigationTutorial");
 const layersTutorial = document.getElementById("layersTutorial");
 const bodyStyle = document.body.style;
@@ -28,14 +29,27 @@ const bodyStyle = document.body.style;
 function newGame() {
   mainMenu.classList.add("hidden");
   canvas.classList.remove("hidden");
-  timer.classList.remove("hidden");
+  topBar.classList.remove("hidden");
 
   bodyStyle.animationName = undefined;
   bodyStyle.backgroundColor = currentColor[2];
   navigationTutorial.classList.remove("hidden");
 
-  startMusic();
+  music.play();
 
   player.spawn();
   update();
+}
+
+function toggleMute() {
+  if (mute.value === "unmuted") {
+    sounds.forEach((sound) => (sound.volume = 0));
+    mute.value = "muted";
+    mute.innerText = "🔈";
+  } else {
+    sounds.forEach((sound) => (sound.volume = 0.8));
+    music.volume = 0.8;
+    mute.value = "unmuted";
+    mute.innerText = "🔇";
+  }
 }

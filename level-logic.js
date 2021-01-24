@@ -184,11 +184,3 @@ function playerWon() {
   document.querySelector("footer").style.fontSize = "3rem";
   canvas.style.display = "none";
 }
-
-// Audio
-function startMusic() {
-  const music = document.getElementById("music");
-  music.src = "./sounds/game.mp3";
-  music.autoplay = "true";
-  music.play();
-}
