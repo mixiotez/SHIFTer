@@ -1,29 +1,31 @@
-# TRY IT HERE:
-
-https://mikempala.github.io/SHIFTer/
-
 # SHIFTer
 
-SHIFTer is an HTML5 / CSS / JavaScript platform videogame.
+SHIFTer is an HTML5 / CSS / Vanilla JavaScript platform videogame inspired by Time Fcuk
 
-# Approach Taken
+You can play it here ➡️ https://mikempala.github.io/SHIFTer/
 
-First, the player and the moving logic was created.
+## Instructions
 
-Then the game layout was created via a matrix. A method was created to inspect the value of every element, then return the tile. Since this method is called 60 times every second, the collision checker was included in the same method.
+Use the arrow keys and the space bar to navigate to the exit. Some levels require a key to unlock the door.
 
-Lastly, the Main Menu, tutorial, sounds, and timer were included.
+Most levels have two layers: lighter-colored tiles are 'walkable' in the current layer, while darker colored tiles are walkable in the second layer.
 
-# Instructions
+You can switch between layers using "A" and "D".
 
-The objective of each level is to reach the door to the next level. Some levels require a key to unlock the door.
+## Sounds
 
-You move with the 'left’ and ‘right’ arrow keys || You jump with the ‘space’ or ‘up’ arrow key.
+All the sounds were created by me using FL Studio and YMCK's Magical 8bit Plug.
 
-Most levels have two layers. Lighter colored tiles are walkable, while darker colored tiles are only walkable in the second layer.
+## What approach was taken when creating this?
 
-You must switch between layers to solve the puzzle. Use "A" and "D" to switch between layers.
-
-# MUSIC
-
-All sounds were created by me
+1. Player and moving logic were coded.
+2. The game layout was created via a matrix. A method was created to inspect the matrix and return a tile-based on its value.
+3. A collision checker was added to the matrix: this allowed players to stay on platforms and exit levels.
+4. Levels became more complex, and more items were added, such as keys and saws.
+5. The main menu was created, followed by the tutorial (based on images).
+6. Sounds and timer were included as well as a final screen when the game was won.
+7. The code was refactored several times with readability and performance improvements.
+8. The main menu was re-imagined: the hamburger menu disappeared, animations were added, and the tutorial was integrated into the game.
+9. Warnings were added on two breakpoints to signal the lack of mobile support.
+10. The "congratulations" screen and timer were improved.
+11. A footer was added as well as a muting button that disables all sounds.
