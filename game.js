@@ -2,10 +2,18 @@ import { Level } from "./level.js";
 import { levels } from "./levels.js";
 import { TILE_SIZE, COLORS, SOUNDS } from "./consts.js";
 
+// HTML elements
+const navigationTutorial = document.getElementById("navigationTutorial");
+const layersTutorial = document.getElementById("layersTutorial");
+const bodyStyle = document.body.style;
+const muteButton = document.getElementById("mute");
+
+// Items
 function loadImage(src) {
-  const img = new Image();
-  img.src = src;
-  return img;
+  const image = new Image();
+  image.src = src;
+
+  return image;
 }
 
 const items = {
@@ -17,12 +25,6 @@ const items = {
   hiddenSaw: loadImage("./images/saw-hidden.png"),
   invertYArrow: loadImage("./images/invertYArrow.png"),
 };
-
-// HTML elements
-const navigationTutorial = document.getElementById("navigationTutorial");
-const layersTutorial = document.getElementById("layersTutorial");
-const bodyStyle = document.body.style;
-const muteButton = document.getElementById("mute");
 
 class Game {
   constructor(ctx, controller, player) {
@@ -125,6 +127,7 @@ class Game {
   }
 
   respawnPlayer() {
+    SOUNDS.die.play();
     this.restartLevel();
     this.player.respawn(...this.currentLevel.spawnCoords);
   }
@@ -146,140 +149,100 @@ class Game {
     this.player.invertPosition();
   }
 
+  createTile(x, y, offset = 0) {
+    return {
+      x: x * TILE_SIZE + offset / 2,
+      y: y * TILE_SIZE + offset / 2,
+      width: TILE_SIZE - offset,
+      height: TILE_SIZE - offset,
+    };
+  }
+
+  drawTile({ tile: { x, y, width, height }, item, color }) {
+    if (item) {
+      this.ctx.drawImage(items[item], x, y, width, height);
+    } else {
+      this.ctx.fillStyle = color;
+      this.ctx.fillRect(x, y, width, height);
+    }
+  }
+
   // This function checks every value of the 2D array and paints an image on its coordinates
   drawMap() {
-    for (let i = 0; i < this.currentMap.length; i++) {
-      for (let j = 0; j < this.currentMap[i].length; j++) {
-        let currentTile = this.currentMap[i][j];
+    for (let x = 0; x < this.currentMap.length; x++) {
+      for (let y = 0; y < this.currentMap[x].length; y++) {
+        let tile;
 
-        if (currentTile === 1) {
-          let tile = {
-            x: TILE_SIZE * [j],
-            y: TILE_SIZE * [i],
-            width: TILE_SIZE,
-            height: TILE_SIZE,
-          };
-          this.ctx.fillStyle = this.colors.primary;
-          this.ctx.fillRect(tile.x, tile.y, tile.width, tile.height);
-          this.player.handleTileCollision(tile);
-        }
+        switch (this.currentMap[y][x]) {
+          case 1:
+            tile = this.createTile(x, y);
+            this.drawTile({ tile, color: this.colors.primary });
+            this.player.handleTileCollision(tile);
+            break;
 
-        if (currentTile === 2) {
-          let tile = {
-            x: TILE_SIZE * [j],
-            y: TILE_SIZE * [i],
-            width: TILE_SIZE,
-            height: TILE_SIZE,
-          };
-          this.ctx.fillStyle = this.colors.secondary;
-          this.ctx.fillRect(tile.x, tile.y, tile.width, tile.height);
-        }
+          case 2:
+            tile = this.createTile(x, y);
+            this.drawTile({ tile, color: this.colors.secondary });
+            break;
 
-        if (currentTile === 3) {
-          let tile = {
-            x: TILE_SIZE * [j] + 2,
-            y: TILE_SIZE * [i] + 4,
-            width: TILE_SIZE - 4,
-            height: TILE_SIZE - 4,
-          };
-          this.ctx.drawImage(saw, tile.x, tile.y, tile.height, tile.width);
-          if (this.player.isTouching(tile)) {
-            this.respawnPlayer();
-            SOUNDS.die.play();
-            this.currentLevel.keys++;
-          }
-        }
+          case 3:
+            tile = this.createTile(x, y, 2);
+            this.drawTile({ tile, item: "saw" });
 
-        if (currentTile === 4) {
-          let tile = {
-            x: TILE_SIZE * [j] + 2,
-            y: TILE_SIZE * [i] + 4,
-            width: TILE_SIZE - 4,
-            height: TILE_SIZE - 4,
-          };
-          this.ctx.drawImage(
-            hiddenSaw,
-            tile.x,
-            tile.y,
-            tile.height,
-            tile.width
-          );
-        }
-
-        if (currentTile === 5) {
-          if (this.currentLevel.keys) {
-            let tile = {
-              x: TILE_SIZE * [j] + 4,
-              y: TILE_SIZE * [i] + 8,
-              width: TILE_SIZE - 8,
-              height: TILE_SIZE - 8,
-            };
-            this.ctx.drawImage(key, tile.x, tile.y, tile.width, tile.height);
             if (this.player.isTouching(tile)) {
-              this.currentLevel.keys--;
-              SOUNDS.key.play();
+              this.respawnPlayer();
+              this.currentLevel.keys++;
             }
-          }
-        }
+            break;
 
-        if (currentTile === 6) {
-          if (this.currentLevel.keys) {
-            let tile = {
-              x: TILE_SIZE * [j] + 4,
-              y: TILE_SIZE * [i] + 8,
-              width: TILE_SIZE - 8,
-              height: TILE_SIZE - 8,
-            };
-            this.ctx.drawImage(
-              hiddenKey,
-              tile.x,
-              tile.y,
-              tile.width,
-              tile.height
-            );
-          }
-        }
+          case 4:
+            tile = this.createTile(x, y, 2);
+            this.drawTile({ tile, item: "hiddenSaw" });
+            break;
 
-        if (currentTile === 7) {
-          let tile = {
-            x: TILE_SIZE * [j],
-            y: TILE_SIZE * [i] + 4,
-            width: TILE_SIZE,
-            height: TILE_SIZE - 6,
-          };
-          this.ctx.drawImage(
-            invertYArrow,
-            tile.x,
-            tile.y,
-            tile.width,
-            tile.height
-          );
-          if (this.player.isTouching(tile) && !this.invertedMap) {
-            this.invertMap();
-          }
-        }
+          case 5:
+            if (this.currentLevel.keys) {
+              tile = this.createTile(x, y, 2);
+              this.drawTile({ tile, item: "key" });
 
-        if (currentTile === 8) {
-          let tile = {
-            x: TILE_SIZE * [j] + 2,
-            y: TILE_SIZE * [i] + 2,
-            width: TILE_SIZE - 4,
-            height: TILE_SIZE - 4,
-          };
-          // If there are keys in the room, the door will remain closed
-          if (this.currentLevel.keys)
-            this.ctx.drawImage(
-              closedDoor,
-              tile.x,
-              tile.y,
-              tile.width,
-              tile.height
-            );
-          else {
-            // If no keys are present, the exit door will open
-            this.ctx.drawImage(door, tile.x, tile.y, tile.width, tile.height);
-            if (this.player.isTouching(tile)) this.nextLevel();
-          }
+              if (this.player.isTouching(tile)) {
+                this.currentLevel.keys--;
+                SOUNDS.key.play();
+              }
+            }
+            break;
+
+          case 6:
+            if (this.currentLevel.keys) {
+              tile = this.createTile(x, y, 4);
+              this.drawTile({ tile, item: "hiddenKey" });
+            }
+            break;
+
+          case 7:
+            tile = this.createTile(x, y, 2);
+            this.drawTile({ tile, item: "invertYArrow" });
+
+            if (this.player.isTouching(tile) && !this.invertedMap) {
+              this.invertMap();
+            }
+            break;
+
+          case 8:
+            tile = this.createTile(x, y, 2);
+
+            // If there are keys in the room, the door will remain closed
+            if (this.currentLevel.keys)
+              this.drawTile({ tile, item: "closedDoor" });
+            else {
+              // If no keys are present, the exit door will open
+              this.drawTile({ tile, item: "door" });
+              if (this.player.isTouching(tile)) this.nextLevel();
+            }
+            break;
+
+          default:
+            break;
         }
       }
     }
