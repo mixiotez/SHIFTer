@@ -4,6 +4,7 @@ class Player {
   constructor(ctx, controller) {
     this.ctx = ctx;
     this.controller = controller;
+
     this.width = 15;
     this.height = 30;
 
@@ -19,7 +20,7 @@ class Player {
     this.time = 0;
 
     // Indicates if the player's Y position was inverted
-    this.isYInverted = false;
+    this.invertedPosition = false;
   }
 
   draw() {
@@ -27,7 +28,7 @@ class Player {
     this.ctx.fillRect(this.x, this.y, this.width, this.height);
   }
 
-  itemCollision(item) {
+  isTouching(item) {
     // Collision for grabbing items
     return (
       this.x < item.x + item.width &&
@@ -39,7 +40,7 @@ class Player {
 
   spawn(x, y) {
     // Checks what's the level's x and y spawn coordinates and assigns it to the player
-    this.isYInverted = false;
+    this.invertedPosition = false;
     this.velX = 0;
     this.velY = 0;
     this.x = x;
@@ -47,7 +48,7 @@ class Player {
   }
 
   respawn(x, y) {
-    this.isYInverted = false;
+    this.invertedPosition = false;
     this.x = undefined; // This makes the player disappear from the canvas by hiding it
     this.y = undefined;
 
@@ -56,26 +57,23 @@ class Player {
     }, 500);
   }
 
-  invertY() {
+  invertPosition() {
     this.velY = 0;
     this.y = canvas.width + this.height - this.y;
-    this.isYInverted = true;
+    this.invertedPosition = true;
   }
 
   captureMovement() {
-    if (this.controller.pressedKeys[32] || this.controller.pressedKeys[38])
-      if (!this.isJumping) {
-        // jump
-        this.isJumping = true;
-        this.velY = -this.speed * 2.75;
-        SOUNDS.jumpSound.play();
-      }
+    if (this.controller.pressedKeys[32] && !this.isJumping) {
+      // jump
+      this.isJumping = true;
+      this.velY = -this.speed * 2.75;
+      SOUNDS.jump.play();
+    }
 
-    if (this.controller.pressedKeys[39])
-      if (this.velX < this.speed) this.velX++; // right
+    if (this.controller.pressedKeys[39] && this.velX < this.speed) this.velX++; // right
 
-    if (this.controller.pressedKeys[37])
-      if (this.velX > -this.speed) this.velX--; // left
+    if (this.controller.pressedKeys[37] && this.velX > -this.speed) this.velX--; // left
 
     if (this.velY !== 0) this.isJumping = true; // This prevents the player from jumping mid-air when falling
 
@@ -85,13 +83,10 @@ class Player {
     this.velX *= this.friction;
     this.velY += this.gravity;
 
-    // Restart (testing purposes, not actually used in the game)
-    if (this.controller.pressedKeys[82]) this.respawn();
-
     this.draw();
   }
 
-  tileCollision(tile) {
+  handleTileCollision(tile) {
     const vX = this.x + this.width / 2 - (tile.x + tile.width / 2),
       vY = this.y + this.height / 2 - (tile.y + tile.height / 2),
       // Add the half widths and half heights of the objects

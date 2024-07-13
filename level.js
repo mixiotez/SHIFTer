@@ -1,14 +1,16 @@
 const invertMap = (map) => [...map].reverse();
 
 class Level {
-  constructor(data) {
-    this.mapMain = data.mapMain;
-    this.mapAlt = data.mapAlt;
-    this.keys = data.keys;
-    this.hasInvertedY = data?.hasInvertedY || false;
-    this.invertedY = this?.hasInvertedY ? invertMap(this.mapMain) : null;
-    this.invertedYAlt = this?.hasInvertedY ? invertMap(this.mapAlt) : null;
-    this.spawnPoint = data.spawnPoint;
+  constructor({ maps, keys, invertedMap = false, spawnCoords }) {
+    this.maps = {
+      main: maps.main,
+      alt: maps.alt,
+      inverted: invertedMap ? invertMap(maps.main) : null,
+      invertedAlt: invertedMap ? invertMap(maps.alt) : null,
+    };
+    this.keys = keys;
+    this.invertedMap = invertedMap;
+    this.spawnCoords = spawnCoords;
   }
 }
 

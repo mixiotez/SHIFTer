@@ -27,7 +27,7 @@ const bodyStyle = document.body.style;
 const mainMenu = document.getElementById("menu");
 const topBar = document.getElementById("topBar");
 
-function newGame() {
+function startGame() {
   mainMenu.classList.add("hidden");
   canvas.classList.remove("hidden");
   topBar.classList.remove("hidden");
@@ -45,5 +45,5 @@ function newGame() {
 document.body.onkeydown = (e) => controller.pressKey(e.keyCode);
 document.body.onkeyup = (e) => controller.releaseKey(e.keyCode);
 
-window.newGame = newGame;
+window.startGame = startGame;
 window.toggleMute = game.toggleMute;

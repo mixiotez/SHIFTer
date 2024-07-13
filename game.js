@@ -2,28 +2,23 @@ import { Level } from "./level.js";
 import { levels } from "./levels.js";
 import { TILE_SIZE, COLORS, SOUNDS } from "./consts.js";
 
-// Items
-const key = new Image();
-key.src = "./images/key.png";
+function loadImage(src) {
+  const img = new Image();
+  img.src = src;
+  return img;
+}
 
-const hiddenKey = new Image();
-hiddenKey.src = "./images/key-hidden.png";
+const items = {
+  key: loadImage("./images/key.png"),
+  hiddenKey: loadImage("./images/key-hidden.png"),
+  door: loadImage("./images/door.png"),
+  closedDoor: loadImage("./images/closedDoor.png"),
+  saw: loadImage("./images/saw.png"),
+  hiddenSaw: loadImage("./images/saw-hidden.png"),
+  invertYArrow: loadImage("./images/invertYArrow.png"),
+};
 
-const door = new Image();
-door.src = "./images/door.png";
-
-const closedDoor = new Image();
-closedDoor.src = "./images/closedDoor.png";
-
-const saw = new Image();
-saw.src = "./images/saw.png";
-
-const hiddenSaw = new Image();
-hiddenSaw.src = "./images/saw-hidden.png";
-
-const invertYArrow = new Image();
-invertYArrow.src = "./images/invertYArrow.png";
-
+// HTML elements
 const navigationTutorial = document.getElementById("navigationTutorial");
 const layersTutorial = document.getElementById("layersTutorial");
 const bodyStyle = document.body.style;
@@ -34,27 +29,28 @@ class Game {
     this.ctx = ctx;
     this.controller = controller;
     this.player = player;
+
     this.isPaused = false;
     this.levels = levels.map((level) => new Level(level));
-    this.levelCounter = 0;
+    this.levelCounter = 1;
     this.isInMainMap = true;
-    this.isYInverted = false;
+    this.invertedMap = false;
     this.colors = COLORS[0];
   }
 
   get currentLevel() {
-    return this.levels[this.levelCounter];
+    return this.levels[this.levelCounter - 1];
   }
 
   get currentMap() {
-    if (!this.isYInverted) {
+    if (!this.invertedMap) {
       if (this.isInMainMap) {
-        return this.currentLevel.mapMain;
-      } else return this.currentLevel.mapAlt;
+        return this.currentLevel.maps.main;
+      } else return this.currentLevel.maps.alt;
     } else {
       if (this.isInMainMap) {
-        return this.currentLevel.invertedY;
-      } else return this.currentLevel.invertedYAlt;
+        return this.currentLevel.maps.inverted;
+      } else return this.currentLevel.maps.invertedAlt;
     }
   }
 
@@ -75,32 +71,36 @@ class Game {
       bodyStyle.backgroundImage = bodyStyle.backgroundColor =
         this.colors.secondary;
     }
+
+    if (this.controller.pressedKeys[82]) {
+      this.respawnPlayer();
+    }
   }
 
   restartLevel() {
     this.generateColors();
     this.isInMainMap = true;
-    this.isYInverted = false;
+    this.invertedMap = false;
     bodyStyle.backgroundColor = this.colors.background;
   }
 
   nextLevel() {
-    SOUNDS.nextLevelSound.play();
+    SOUNDS.nextLevel.play();
 
     switch (this.levelCounter) {
-      case 0:
+      case 1:
         navigationTutorial.classList.add("hidden");
         break;
 
-      case 1:
+      case 2:
         layersTutorial.classList.remove("hidden");
         break;
 
-      case 2:
+      case 3:
         layersTutorial.classList.add("hidden");
         break;
 
-      case this.levels.length - 1:
+      case this.levels.length:
         return this.endGame();
 
       default:
@@ -121,12 +121,12 @@ class Game {
 
   spawnPlayer() {
     this.restartLevel();
-    this.player.spawn(...this.currentLevel.spawnPoint);
+    this.player.spawn(...this.currentLevel.spawnCoords);
   }
 
   respawnPlayer() {
     this.restartLevel();
-    this.player.respawn(...this.currentLevel.spawnPoint);
+    this.player.respawn(...this.currentLevel.spawnCoords);
   }
 
   toggleMute() {
@@ -141,9 +141,9 @@ class Game {
     }
   }
 
-  invertY() {
-    this.isYInverted = true;
-    this.player.invertY();
+  invertMap() {
+    this.invertedMap = true;
+    this.player.invertPosition();
   }
 
   // This function checks every value of the 2D array and paints an image on its coordinates
@@ -161,7 +161,7 @@ class Game {
           };
           this.ctx.fillStyle = this.colors.primary;
           this.ctx.fillRect(tile.x, tile.y, tile.width, tile.height);
-          this.player.tileCollision(tile);
+          this.player.handleTileCollision(tile);
         }
 
         if (currentTile === 2) {
@@ -183,9 +183,9 @@ class Game {
             height: TILE_SIZE - 4,
           };
           this.ctx.drawImage(saw, tile.x, tile.y, tile.height, tile.width);
-          if (this.player.itemCollision(tile)) {
+          if (this.player.isTouching(tile)) {
             this.respawnPlayer();
-            SOUNDS.dieSound.play();
+            SOUNDS.die.play();
             this.currentLevel.keys++;
           }
         }
@@ -215,9 +215,9 @@ class Game {
               height: TILE_SIZE - 8,
             };
             this.ctx.drawImage(key, tile.x, tile.y, tile.width, tile.height);
-            if (this.player.itemCollision(tile)) {
+            if (this.player.isTouching(tile)) {
               this.currentLevel.keys--;
-              SOUNDS.keySound.play();
+              SOUNDS.key.play();
             }
           }
         }
@@ -254,8 +254,8 @@ class Game {
             tile.width,
             tile.height
           );
-          if (this.player.itemCollision(tile) && !this.player.isYInverted) {
-            this.invertY();
+          if (this.player.isTouching(tile) && !this.invertedMap) {
+            this.invertMap();
           }
         }
 
@@ -278,7 +278,7 @@ class Game {
           else {
             // If no keys are present, the exit door will open
             this.ctx.drawImage(door, tile.x, tile.y, tile.width, tile.height);
-            if (this.player.itemCollision(tile)) this.nextLevel();
+            if (this.player.isTouching(tile)) this.nextLevel();
           }
         }
       }

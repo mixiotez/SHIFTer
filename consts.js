@@ -30,13 +30,15 @@ const COLORS = [
   },
 ];
 
-const theme = new Audio("./sounds/game.mp3");
-theme.level = 0.8;
-theme.loop = true;
-const jumpSound = new Audio("./sounds/jump.mp3");
-const dieSound = new Audio("./sounds/die.mp3");
-const nextLevelSound = new Audio("./sounds/nextLevel.mp3");
-const keySound = new Audio("./sounds/key.mp3");
-const SOUNDS = { theme, jumpSound, dieSound, nextLevelSound, keySound };
+const SOUNDS = {
+  theme: new Audio("./sounds/game.mp3"),
+  jump: new Audio("./sounds/jump.mp3"),
+  die: new Audio("./sounds/die.mp3"),
+  nextLevel: new Audio("./sounds/nextLevel.mp3"),
+  key: new Audio("./sounds/key.mp3"),
+};
+
+SOUNDS.theme.level = 0.8;
+SOUNDS.theme.loop = true;
 
 export { TILE_SIZE, WIDTH, HEIGHT, COLORS, SOUNDS };
