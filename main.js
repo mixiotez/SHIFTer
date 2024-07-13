@@ -1,30 +1,31 @@
+import { WIDTH, HEIGHT, SOUNDS } from "./consts.js";
+import { Player } from "./player.js";
+import { Game } from "./game.js";
+import { Controller } from "./controller.js";
+
 const canvas = document.getElementById("canvas");
+canvas.width = WIDTH;
+canvas.height = HEIGHT;
+
 const ctx = canvas.getContext("2d");
-const width = 480;
-const height = 480;
-
-canvas.width = width;
-canvas.height = height;
-
-const player = new Player();
-let pause = false;
+const controller = new Controller();
+const player = new Player(ctx, controller);
+const game = new Game(ctx, controller, player);
 
 function update() {
-  ctx.clearRect(0, 0, width, height); // Clears the canvas
-  drawMap(currentMap); // Draws the tilemap
-  playerMovement(); // Draws the character
+  ctx.clearRect(0, 0, WIDTH, HEIGHT); // Clears the canvas
+  game.drawMap(); // Draws the tilemap
+  player.captureMovement(); // Draws the character
+  game.captureMapChanges();
   player.time += 1 / 60;
   document.getElementById("time").innerHTML = Math.floor(player.time); // Update the timer
 
-  if (!pause) requestAnimationFrame(update);
+  if (!game.isPaused) requestAnimationFrame(update);
 }
 
+const bodyStyle = document.body.style;
 const mainMenu = document.getElementById("menu");
 const topBar = document.getElementById("topBar");
-const mute = document.getElementById("mute");
-const navigationTutorial = document.getElementById("navigationTutorial");
-const layersTutorial = document.getElementById("layersTutorial");
-const bodyStyle = document.body.style;
 
 function newGame() {
   mainMenu.classList.add("hidden");
@@ -32,24 +33,17 @@ function newGame() {
   topBar.classList.remove("hidden");
 
   bodyStyle.animationName = undefined;
-  bodyStyle.backgroundColor = currentColor[2];
+  bodyStyle.backgroundColor = game.colors.background;
   navigationTutorial.classList.remove("hidden");
 
-  music.play();
+  SOUNDS.theme.play();
 
-  player.spawn();
+  game.spawnPlayer();
   update();
 }
 
-function toggleMute() {
-  if (mute.value === "unmuted") {
-    sounds.forEach((sound) => (sound.volume = 0));
-    mute.value = "muted";
-    mute.innerText = "🔈";
-  } else {
-    sounds.forEach((sound) => (sound.volume = 0.8));
-    music.volume = 0.8;
-    mute.value = "unmuted";
-    mute.innerText = "🔇";
-  }
-}
+document.body.onkeydown = (e) => controller.pressKey(e.keyCode);
+document.body.onkeyup = (e) => controller.releaseKey(e.keyCode);
+
+window.newGame = newGame;
+window.toggleMute = game.toggleMute;
