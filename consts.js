@@ -1,4 +1,4 @@
-const WIDTH = 480;
+const WIDTH = 720;
 const HEIGHT = WIDTH;
 const TILE_SIZE = WIDTH / 15;
 

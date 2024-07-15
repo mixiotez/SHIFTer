@@ -1,16 +1,16 @@
-import { SOUNDS, WIDTH } from "./consts.js";
+import { SOUNDS, TILE_SIZE, WIDTH } from "./consts.js";
 
 class Player {
   constructor(ctx, controller) {
     this.ctx = ctx;
     this.controller = controller;
 
-    this.width = 15;
-    this.height = 30;
+    this.width = TILE_SIZE / 2;
+    this.height = TILE_SIZE - 2;
 
     this.velX = 0;
     this.velY = 0;
-    this.speed = 2.5; // How fast the player can go
+    this.speed = 3.2; // How fast the player can go
     this.isJumping = false;
     this.friction = 0.8; // Makes player slightly slide before stopping
     this.gravity = 0.3; // Rate at which player falls
@@ -98,24 +98,24 @@ class Player {
 
       // Figures out which direction the player is cropping into
       if (offsetX >= offsetY) {
+        this.velY = 0;
+
         if (vY > 0) {
           // Top
-          this.velY = 0;
           this.y += offsetY;
         } else if (vY < 0) {
           // Bottom:
-          this.velY = 0;
           this.isJumping = false;
           this.y -= offsetY;
         }
       } else {
+        this.velX = 0;
+
         if (vX > 0) {
           // Left
-          this.velX = 0;
           this.x += offsetX;
         } else if (vX < 0) {
           // Right
-          this.velX = 0;
           this.x -= offsetX;
         }
       }
