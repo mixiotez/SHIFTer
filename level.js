@@ -1,4 +1,7 @@
+import { TILE_SIZE } from "./consts.js";
+
 const invertMap = (map) => [...map].reverse();
+const generateCoords = (coords) => coords.map((coord) => coord * TILE_SIZE + 2);
 
 class Level {
   constructor({ maps, keys, invertedMap = false, spawnCoords }) {
@@ -10,7 +13,7 @@ class Level {
     };
     this.keys = keys;
     this.invertedMap = invertedMap;
-    this.spawnCoords = spawnCoords;
+    this.spawnCoords = generateCoords(spawnCoords);
   }
 }
 

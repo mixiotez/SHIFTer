@@ -32,7 +32,7 @@ const level1 = {
   },
 
   keys: 0,
-  spawnCoords: [34, 320],
+  spawnCoords: [1, 10],
 };
 level1.maps.alt = level1.maps.main;
 
@@ -58,7 +58,7 @@ const level2 = {
   },
 
   keys: 0,
-  spawnCoords: [34, 0],
+  spawnCoords: [1, 0],
 };
 level2.maps.alt = level2.maps.main;
 
@@ -101,7 +101,7 @@ const level3 = {
   },
 
   keys: 1,
-  spawnCoords: [34, 288],
+  spawnCoords: [1, 9],
 };
 
 const level4 = {
@@ -143,7 +143,7 @@ const level4 = {
   },
 
   keys: 1,
-  spawnCoords: [420, 388],
+  spawnCoords: [13, 12],
 };
 
 const level5 = {
@@ -185,7 +185,7 @@ const level5 = {
   },
 
   keys: 1,
-  spawnCoords: [420, 64],
+  spawnCoords: [13, 2],
 };
 
 const level6 = {
@@ -227,7 +227,7 @@ const level6 = {
   },
 
   keys: 1,
-  spawnCoords: [420, 420],
+  spawnCoords: [13, 13],
 };
 
 const level7 = {
@@ -270,7 +270,7 @@ const level7 = {
 
   invertedMap: true,
   keys: 1,
-  spawnCoords: [32, 32],
+  spawnCoords: [1, 1],
 };
 
 const level8 = {
@@ -313,7 +313,7 @@ const level8 = {
 
   invertedMap: true,
   keys: 1,
-  spawnCoords: [234, 64],
+  spawnCoords: [7, 2],
 };
 
 const levels = [

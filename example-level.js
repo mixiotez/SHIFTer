@@ -37,5 +37,5 @@ const level = {
   },
 
   keys: 0,
-  spawnCoords: [32, 32],
+  spawnCoords: [1, 1],
 };
