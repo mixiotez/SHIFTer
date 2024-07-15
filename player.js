@@ -82,8 +82,6 @@ class Player {
 
     this.velX *= this.friction;
     this.velY += this.gravity;
-
-    this.draw();
   }
 
   handleTileCollision(tile) {

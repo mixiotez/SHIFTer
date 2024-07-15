@@ -15,8 +15,8 @@ const game = new Game(ctx, controller, player);
 function update() {
   ctx.clearRect(0, 0, WIDTH, HEIGHT); // Clears the canvas
   game.drawMap(); // Draws the tilemap
-  player.captureMovement(); // Draws the character
-  game.captureMapChanges();
+  player.draw(); // Draws the character
+  player.captureMovement();
   player.time += 1 / 60;
   document.getElementById("time").innerHTML = Math.floor(player.time); // Update the timer
 
@@ -42,8 +42,17 @@ function startGame() {
   update();
 }
 
-document.body.onkeydown = (e) => controller.pressKey(e.keyCode);
-document.body.onkeyup = (e) => controller.releaseKey(e.keyCode);
+document.body.onkeydown = (e) => {
+  if (!controller.pressedKeys[e.keyCode]) {
+    controller.pressKey(e.keyCode);
+    game.captureMapChanges();
+  }
+};
+
+document.body.onkeyup = (e) => {
+  controller.releaseKey(e.keyCode);
+};
 
 window.startGame = startGame;
 window.toggleMute = game.toggleMute;
+startGame();

@@ -35,28 +35,27 @@ class Game {
     this.isPaused = false;
     this.levels = levels.map((level) => new Level(level));
     this.levelCounter = 1;
+    this.currentLevel = this.levels[0];
+
+    this.currentMap = this.currentLevel.maps.main;
     this.isInMainMap = true;
     this.invertedMap = false;
     this.colors = COLORS[0];
   }
 
-  get currentLevel() {
-    return this.levels[this.levelCounter - 1];
-  }
-
-  get currentMap() {
+  updateCurrentMap() {
     if (!this.invertedMap) {
       if (this.isInMainMap) {
-        return this.currentLevel.maps.main;
-      } else return this.currentLevel.maps.alt;
+        this.currentMap = this.currentLevel.maps.main;
+      } else this.currentMap = this.currentLevel.maps.alt;
     } else {
       if (this.isInMainMap) {
-        return this.currentLevel.maps.inverted;
-      } else return this.currentLevel.maps.invertedAlt;
+        this.currentMap = this.currentLevel.maps.inverted;
+      } else this.currentMap = this.currentLevel.maps.invertedAlt;
     }
   }
 
-  generateColors() {
+  updateColors() {
     const randomIndex = Math.floor(Math.random() * COLORS.length);
     this.colors = COLORS[randomIndex];
   }
@@ -64,11 +63,13 @@ class Game {
   captureMapChanges() {
     if (this.controller.pressedKeys[65]) {
       this.isInMainMap = true;
+      this.updateCurrentMap();
       bodyStyle.backgroundImage = bodyStyle.backgroundColor =
         this.colors.background;
     }
 
     if (this.controller.pressedKeys[68]) {
+      this.updateCurrentMap();
       this.isInMainMap = false;
       bodyStyle.backgroundImage = bodyStyle.backgroundColor =
         this.colors.secondary;
@@ -80,9 +81,10 @@ class Game {
   }
 
   restartLevel() {
-    this.generateColors();
+    this.updateColors();
     this.isInMainMap = true;
     this.invertedMap = false;
+    this.updateCurrentMap();
     bodyStyle.backgroundColor = this.colors.background;
   }
 
@@ -109,6 +111,7 @@ class Game {
         break;
     }
 
+    this.currentLevel = this.levels[this.levelCounter];
     this.levelCounter++;
     this.spawnPlayer();
   }
@@ -146,6 +149,7 @@ class Game {
 
   invertMap() {
     this.invertedMap = true;
+    this.updateCurrentMap();
     this.player.invertPosition();
   }
 

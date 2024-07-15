@@ -1,6 +1,6 @@
 class Controller {
   constructor() {
-    this.pressedKeys = [];
+    this.pressedKeys = {};
   }
 
   pressKey(keyCode) {
