@@ -35,7 +35,7 @@ class Game {
     this.isPaused = false;
     this.levels = levels.map((level) => new Level(level));
     this.levelCounter = 1;
-    this.currentLevel = this.levels[0];
+    this.currentLevel = this.levels[this.levelCounter - 1];
 
     this.currentMap = this.currentLevel.maps.main;
     this.isInMainMap = true;
@@ -69,8 +69,8 @@ class Game {
     }
 
     if (this.controller.pressedKeys[68]) {
-      this.updateCurrentMap();
       this.isInMainMap = false;
+      this.updateCurrentMap();
       bodyStyle.backgroundImage = bodyStyle.backgroundColor =
         this.colors.secondary;
     }
@@ -147,6 +147,7 @@ class Game {
     }
   }
 
+  // Inverts the map vertically
   invertMap() {
     this.invertedMap = true;
     this.updateCurrentMap();
@@ -155,8 +156,8 @@ class Game {
 
   createTile(x, y, offset = 0) {
     return {
-      x: x * TILE_SIZE + offset / 2,
-      y: y * TILE_SIZE + offset / 2,
+      x: y * TILE_SIZE + offset / 2,
+      y: x * TILE_SIZE + offset / 2,
       width: TILE_SIZE - offset,
       height: TILE_SIZE - offset,
     };
@@ -171,13 +172,13 @@ class Game {
     }
   }
 
-  // This function checks every value of the 2D array and paints an image on its coordinates
+  // Maps numbers into images and paints them on the canvas
   drawMap() {
     for (let x = 0; x < this.currentMap.length; x++) {
       for (let y = 0; y < this.currentMap[x].length; y++) {
         let tile;
 
-        switch (this.currentMap[y][x]) {
+        switch (this.currentMap[x][y]) {
           case 1:
             tile = this.createTile(x, y);
             this.drawTile({ tile, color: this.colors.primary });
@@ -235,11 +236,9 @@ class Game {
           case 8:
             tile = this.createTile(x, y, 2);
 
-            // If there are keys in the room, the door will remain closed
             if (this.currentLevel.keys)
               this.drawTile({ tile, item: "closedDoor" });
             else {
-              // If no keys are present, the exit door will open
               this.drawTile({ tile, item: "door" });
               if (this.player.isTouching(tile)) this.nextLevel();
             }

@@ -12,15 +12,16 @@ const controller = new Controller();
 const player = new Player(ctx, controller);
 const game = new Game(ctx, controller, player);
 
-function update() {
-  ctx.clearRect(0, 0, WIDTH, HEIGHT); // Clears the canvas
-  game.drawMap(); // Draws the tilemap
-  player.draw(); // Draws the character
+function gameLoop() {
+  ctx.clearRect(0, 0, WIDTH, HEIGHT);
+  game.drawMap();
+  player.draw();
   player.captureMovement();
-  player.time += 1 / 60;
-  document.getElementById("time").innerHTML = Math.floor(player.time); // Update the timer
 
-  if (!game.isPaused) requestAnimationFrame(update);
+  player.time += 1 / 60;
+  document.getElementById("time").innerHTML = Math.floor(player.time);
+
+  if (!game.isPaused) requestAnimationFrame(gameLoop);
 }
 
 const bodyStyle = document.body.style;
@@ -39,12 +40,15 @@ function startGame() {
   SOUNDS.theme.play();
 
   game.spawnPlayer();
-  update();
+  gameLoop();
 }
 
 document.body.onkeydown = (e) => {
+  // Prevents multiple execution while holding down a key
   if (!controller.pressedKeys[e.keyCode]) {
     controller.pressKey(e.keyCode);
+
+    // It only needs to be registered once, unlike the player's movement
     game.captureMapChanges();
   }
 };
@@ -55,4 +59,3 @@ document.body.onkeyup = (e) => {
 
 window.startGame = startGame;
 window.toggleMute = game.toggleMute;
-startGame();
