@@ -62,15 +62,17 @@ class Player {
   }
 
   captureMovement() {
-    if (this.controller.pressedKeys[32] && !this.isJumping) {
+    if (this.controller.pressedKeys.Space && !this.isJumping) {
       this.isJumping = true;
       this.velY = -this.speed * 2.75;
       SOUNDS.jump.play();
     }
 
-    if (this.controller.pressedKeys[39] && this.velX < this.speed) this.velX++;
+    if (this.controller.pressedKeys.ArrowRight && this.velX < this.speed)
+      this.velX++;
 
-    if (this.controller.pressedKeys[37] && this.velX > -this.speed) this.velX--;
+    if (this.controller.pressedKeys.ArrowLeft && this.velX > -this.speed)
+      this.velX--;
 
     // Prevents jumping if falling down
     if (this.velY !== 0) this.isJumping = true;

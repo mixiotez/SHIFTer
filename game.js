@@ -1,6 +1,6 @@
 import { Level } from "./level.js";
 import { levels } from "./levels.js";
-import { TILE_SIZE, COLORS, SOUNDS } from "./consts.js";
+import { TILE_SIZE, WIDTH, HEIGHT, COLORS, SOUNDS } from "./consts.js";
 
 // HTML elements
 const navigationTutorial = document.getElementById("navigationTutorial");
@@ -32,7 +32,10 @@ class Game {
     this.controller = controller;
     this.player = player;
 
+    this.timerId = 0;
     this.isPaused = false;
+    this.hasEnded = false;
+
     this.levels = levels.map((level) => new Level(level));
     this.levelCounter = 1;
     this.currentLevel = this.levels[this.levelCounter - 1];
@@ -60,19 +63,37 @@ class Game {
     this.colors = COLORS[randomIndex];
   }
 
+  unpause() {
+    clearTimeout(this.timerId);
+    this.isPaused = false;
+  }
+
+  pauseAndDraw() {
+    clearTimeout(this.timerId);
+    this.isPaused = true;
+    this.ctx.clearRect(0, 0, WIDTH, HEIGHT);
+    this.drawMap();
+    this.player.draw();
+    this.timerId = setTimeout(() => {
+      this.isPaused = false;
+    }, 250);
+  }
+
   captureMapChanges() {
-    if (this.controller.pressedKeys[65]) {
+    if (this.controller.pressedKeys.KeyA && !this.isInMainMap) {
       this.isInMainMap = true;
       this.updateCurrentMap();
       bodyStyle.backgroundImage = bodyStyle.backgroundColor =
         this.colors.background;
+      this.pauseAndDraw();
     }
 
-    if (this.controller.pressedKeys[68]) {
+    if (this.controller.pressedKeys.KeyD && this.isInMainMap) {
       this.isInMainMap = false;
       this.updateCurrentMap();
       bodyStyle.backgroundImage = bodyStyle.backgroundColor =
         this.colors.secondary;
+      this.pauseAndDraw();
     }
 
     if (this.controller.pressedKeys[82]) {
@@ -89,6 +110,7 @@ class Game {
   }
 
   nextLevel() {
+    this.unpause();
     SOUNDS.nextLevel.play();
 
     switch (this.levelCounter) {
@@ -118,6 +140,7 @@ class Game {
 
   endGame() {
     this.isPaused = true;
+    this.hasEnded = true;
     bodyStyle.animationName = "backgroundColorTransition";
     document.getElementById("winPopUp").classList.remove("hidden");
     document.querySelector("footer").style.fontSize = "3rem";

@@ -13,15 +13,19 @@ const player = new Player(ctx, controller);
 const game = new Game(ctx, controller, player);
 
 function gameLoop() {
-  ctx.clearRect(0, 0, WIDTH, HEIGHT);
-  game.drawMap();
-  player.draw();
-  player.captureMovement();
+  if (!game.isPaused) {
+    ctx.clearRect(0, 0, WIDTH, HEIGHT);
+    game.drawMap();
+    player.draw();
+    player.captureMovement();
 
-  player.time += 1 / 60;
-  document.getElementById("time").innerHTML = Math.floor(player.time);
+    player.time += 1 / 60;
+    document.getElementById("time").innerHTML = Math.floor(player.time);
+  }
 
-  if (!game.isPaused) requestAnimationFrame(gameLoop);
+  if (!game.hasEnded) {
+    requestAnimationFrame(gameLoop);
+  }
 }
 
 const bodyStyle = document.body.style;
@@ -43,18 +47,21 @@ function startGame() {
   gameLoop();
 }
 
-document.body.onkeydown = (e) => {
+document.body.onkeydown = ({ code }) => {
   // Prevents multiple execution while holding down a key
-  if (!controller.pressedKeys[e.keyCode]) {
-    controller.pressKey(e.keyCode);
+  if (!controller.pressedKeys[code]) {
+    controller.pressKey(code);
 
-    // It only needs to be registered once, unlike the player's movement
-    game.captureMapChanges();
+    // Only register map changes once, unlike the player's
+    // movement, which requires constant key monitoring
+    if (["KeyA", "KeyD"].includes(code)) {
+      game.captureMapChanges();
+    }
   }
 };
 
-document.body.onkeyup = (e) => {
-  controller.releaseKey(e.keyCode);
+document.body.onkeyup = ({ code }) => {
+  controller.releaseKey(code);
 };
 
 window.startGame = startGame;
