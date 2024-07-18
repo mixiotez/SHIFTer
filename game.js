@@ -80,6 +80,9 @@ class Game {
   }
 
   captureMapChanges() {
+    // Don't capture changes if there is no alt map
+    if (!this.currentLevel.maps.alt.length) return;
+
     if (this.controller.pressedKeys.KeyA && !this.isInMainMap) {
       this.isInMainMap = true;
       this.updateCurrentMap();
@@ -96,7 +99,8 @@ class Game {
       this.pauseAndDraw();
     }
 
-    if (this.controller.pressedKeys[82]) {
+    // Restart – For testing only!
+    if (this.controller.pressedKeys.KeyR) {
       this.respawnPlayer();
     }
   }
@@ -172,9 +176,10 @@ class Game {
 
   // Inverts the map vertically
   invertMap() {
-    this.invertedMap = true;
+    this.invertedMap = !this.invertedMap;
     this.updateCurrentMap();
     this.player.invertPosition();
+    this.pauseAndDraw();
   }
 
   createTile(x, y, offset = 0) {
@@ -251,7 +256,7 @@ class Game {
             tile = this.createTile(x, y, 2);
             this.drawTile({ tile, item: "invertYArrow" });
 
-            if (this.player.isTouching(tile) && !this.invertedMap) {
+            if (this.player.isTouching(tile)) {
               this.invertMap();
             }
             break;

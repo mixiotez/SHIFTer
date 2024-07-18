@@ -54,7 +54,7 @@ document.body.onkeydown = ({ code }) => {
 
     // Only register map changes once, unlike the player's
     // movement, which requires constant key monitoring
-    if (["KeyA", "KeyD"].includes(code)) {
+    if (["KeyA", "KeyD", "KeyR"].includes(code)) {
       game.captureMapChanges();
     }
   }
