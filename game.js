@@ -43,6 +43,7 @@ class Game {
     this.currentMap = this.currentLevel.maps.main;
     this.isInMainMap = true;
     this.invertedMap = false;
+    this.previousColors = 0;
     this.colors = COLORS[0];
   }
 
@@ -59,8 +60,16 @@ class Game {
   }
 
   updateColors() {
-    const randomIndex = Math.floor(Math.random() * COLORS.length);
+    let randomIndex = Math.floor(Math.random() * COLORS.length);
+
+    while (this.previousColors === randomIndex) {
+      randomIndex = Math.floor(Math.random() * COLORS.length);
+    }
+
+    this.previousColors = randomIndex;
     this.colors = COLORS[randomIndex];
+    bodyStyle.backgroundImage = bodyStyle.backgroundColor =
+      this.colors.background;
   }
 
   unpause() {
@@ -86,16 +95,12 @@ class Game {
     if (this.controller.pressedKeys.KeyA && !this.isInMainMap) {
       this.isInMainMap = true;
       this.updateCurrentMap();
-      bodyStyle.backgroundImage = bodyStyle.backgroundColor =
-        this.colors.background;
       this.pauseAndDraw();
     }
 
     if (this.controller.pressedKeys.KeyD && this.isInMainMap) {
       this.isInMainMap = false;
       this.updateCurrentMap();
-      bodyStyle.backgroundImage = bodyStyle.backgroundColor =
-        this.colors.secondary;
       this.pauseAndDraw();
     }
 
