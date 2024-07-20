@@ -11,14 +11,13 @@ class Player {
     this.velX = 0;
     this.velY = 0;
     this.speed = 3.2; // How fast the player can go
+    this.isFalling = false;
     this.isJumping = false;
     this.friction = 0.8; // Makes player slightly slide before stopping
     this.gravity = 0.3; // Rate at which player falls
 
     // Score
     this.time = 0;
-
-    this.invertedPosition = false;
   }
 
   draw() {
@@ -36,7 +35,6 @@ class Player {
   }
 
   spawn(x, y) {
-    this.invertedPosition = false;
     this.velX = 0;
     this.velY = 0;
     this.x = x;
@@ -44,8 +42,6 @@ class Player {
   }
 
   respawn(x, y) {
-    this.invertedPosition = false;
-
     // Disappear from canvas before spawning
     this.x = undefined;
     this.y = undefined;
@@ -58,11 +54,14 @@ class Player {
   invertPosition() {
     this.velY = 0;
     this.y = WIDTH + this.height - this.y;
-    this.invertedPosition = true;
   }
 
   captureMovement() {
-    if (this.controller.pressedKeys.Space && !this.isJumping) {
+    if (
+      this.controller.pressedKeys.Space &&
+      !this.isJumping &&
+      !this.isFalling
+    ) {
       this.isJumping = true;
       this.velY = -this.speed * 2.75;
       SOUNDS.jump.play();
@@ -74,8 +73,7 @@ class Player {
     if (this.controller.pressedKeys.ArrowLeft && this.velX > -this.speed)
       this.velX--;
 
-    // Prevents jumping if falling down
-    if (this.velY !== 0) this.isJumping = true;
+    this.isFalling = this.velY > 0.5;
 
     this.x += this.velX;
     this.y += this.velY;
@@ -99,18 +97,26 @@ class Player {
       const offsetY = halfHeights - Math.abs(vY);
 
       // Figures out which direction the player is cropping into
-      if (offsetX >= offsetY) {
-        this.velY = 0;
-
+      if (offsetX > offsetY) {
         if (vY > 0) {
           // Top
+          if (!this.isFalling) {
+            // Keep its falling velocity
+            this.velY = 0;
+          }
+
           this.y += offsetY;
         } else if (vY < 0) {
-          // Bottom:
+          // Bottom
+          if (!this.isJumping) {
+            // Keep its jumping momentum
+            this.velY = 0;
+          }
+
           this.isJumping = false;
           this.y -= offsetY;
         }
-      } else {
+      } else if (offsetX < offsetY) {
         this.velX = 0;
 
         if (vX > 0) {
