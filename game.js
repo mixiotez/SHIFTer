@@ -1,6 +1,6 @@
 import { Level } from "./level.js";
 import { levels } from "./levels.js";
-import { TILE_SIZE, COLORS, SOUNDS } from "./consts.js";
+import { TILE_SIZE, WIDTH, HEIGHT, COLORS, SOUNDS } from "./consts.js";
 
 // HTML elements
 const navigationTutorial = document.getElementById("navigationTutorial");
@@ -32,7 +32,10 @@ class Game {
     this.controller = controller;
     this.player = player;
 
+    this.timerId = 0;
     this.isPaused = false;
+    this.hasEnded = false;
+
     this.levels = levels.map((level) => new Level(level));
     this.levelCounter = 1;
     this.currentLevel = this.levels[this.levelCounter - 1];
@@ -40,6 +43,7 @@ class Game {
     this.currentMap = this.currentLevel.maps.main;
     this.isInMainMap = true;
     this.invertedMap = false;
+    this.previousColors = 0;
     this.colors = COLORS[0];
   }
 
@@ -56,26 +60,52 @@ class Game {
   }
 
   updateColors() {
-    const randomIndex = Math.floor(Math.random() * COLORS.length);
+    let randomIndex = Math.floor(Math.random() * COLORS.length);
+
+    while (this.previousColors === randomIndex) {
+      randomIndex = Math.floor(Math.random() * COLORS.length);
+    }
+
+    this.previousColors = randomIndex;
     this.colors = COLORS[randomIndex];
+    bodyStyle.backgroundImage = bodyStyle.backgroundColor =
+      this.colors.background;
+  }
+
+  unpause() {
+    clearTimeout(this.timerId);
+    this.isPaused = false;
+  }
+
+  pauseAndDraw() {
+    clearTimeout(this.timerId);
+    this.isPaused = true;
+    this.ctx.clearRect(0, 0, WIDTH, HEIGHT);
+    this.drawMap();
+    this.player.draw();
+    this.timerId = setTimeout(() => {
+      this.isPaused = false;
+    }, 250);
   }
 
   captureMapChanges() {
-    if (this.controller.pressedKeys[65]) {
+    // Don't capture changes if there is no alt map
+    if (!this.currentLevel.maps.alt.length) return;
+
+    if (this.controller.pressedKeys.KeyA && !this.isInMainMap) {
       this.isInMainMap = true;
       this.updateCurrentMap();
-      bodyStyle.backgroundImage = bodyStyle.backgroundColor =
-        this.colors.background;
+      this.pauseAndDraw();
     }
 
-    if (this.controller.pressedKeys[68]) {
+    if (this.controller.pressedKeys.KeyD && this.isInMainMap) {
       this.isInMainMap = false;
       this.updateCurrentMap();
-      bodyStyle.backgroundImage = bodyStyle.backgroundColor =
-        this.colors.secondary;
+      this.pauseAndDraw();
     }
 
-    if (this.controller.pressedKeys[82]) {
+    // Restart – For testing only!
+    if (this.controller.pressedKeys.KeyR) {
       this.respawnPlayer();
     }
   }
@@ -89,6 +119,7 @@ class Game {
   }
 
   nextLevel() {
+    this.unpause();
     SOUNDS.nextLevel.play();
 
     switch (this.levelCounter) {
@@ -118,9 +149,10 @@ class Game {
 
   endGame() {
     this.isPaused = true;
+    this.hasEnded = true;
     bodyStyle.animationName = "backgroundColorTransition";
     document.getElementById("winPopUp").classList.remove("hidden");
-    document.querySelector("footer").style.fontSize = "3rem";
+    document.querySelector("footer").classList.remove("hidden");
     canvas.style.display = "none";
   }
 
@@ -149,9 +181,10 @@ class Game {
 
   // Inverts the map vertically
   invertMap() {
-    this.invertedMap = true;
+    this.invertedMap = !this.invertedMap;
     this.updateCurrentMap();
     this.player.invertPosition();
+    this.pauseAndDraw();
   }
 
   createTile(x, y, offset = 0) {
@@ -228,7 +261,7 @@ class Game {
             tile = this.createTile(x, y, 2);
             this.drawTile({ tile, item: "invertYArrow" });
 
-            if (this.player.isTouching(tile) && !this.invertedMap) {
+            if (this.player.isTouching(tile)) {
               this.invertMap();
             }
             break;

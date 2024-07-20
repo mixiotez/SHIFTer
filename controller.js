@@ -3,12 +3,12 @@ class Controller {
     this.pressedKeys = {};
   }
 
-  pressKey(keyCode) {
-    this.pressedKeys[keyCode] = true;
+  pressKey(key) {
+    this.pressedKeys[key] = true;
   }
 
-  releaseKey(keyCode) {
-    this.pressedKeys[keyCode] = false;
+  releaseKey(key) {
+    this.pressedKeys[key] = false;
   }
 }
 
