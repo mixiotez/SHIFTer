@@ -152,7 +152,7 @@ class Game {
     this.hasEnded = true;
     bodyStyle.animationName = "backgroundColorTransition";
     document.getElementById("winPopUp").classList.remove("hidden");
-    document.querySelector("footer").style.fontSize = "3rem";
+    document.querySelector("footer").classList.remove("hidden");
     canvas.style.display = "none";
   }
 
